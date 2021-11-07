@@ -1,13 +1,23 @@
 % StructuresCalc - a program that calculates deflection, stress, and other
-% useful values for a beam whose cross section defined by a spreadsheet
-% which also contains its length
+% useful values for a beam whose atributes are defined by a spreadsheet
+% Copyright (C) 2021  Kale Macormic
+%
+%     This program is free software: you can redistribute it and/or modify
+%     it under the terms of the GNU General Public License as published by
+%     the Free Software Foundation, either version 3 of the License, or
+%     (at your option) any later version.
+% 
+%     This program is distributed in the hope that it will be useful,
+%     but WITHOUT ANY WARRANTY; without even the implied warranty of
+%     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%     GNU General Public License for more details.
+% 
+%     You should have received a copy of the GNU General Public License
+%     along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-% Kale Macormic, et. al.
-% Copyright Kale Macormic 2021
-% AE525 Final Project
-% November 6, 2021 11:06:35 AM CDT
+% November 6, 2021 05:58:07 PM CDT
 
-% NOTICE: This source code is Kale Macormic proprietary information and is
+% NOTICE: This source code is Copyright (C) 2021  Kale Macormic and is
 % intended for AE525 Instructor/Grader use only. If you obtain this
 % document in error destroy it immediately.
 
