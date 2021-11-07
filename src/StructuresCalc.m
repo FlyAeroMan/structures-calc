@@ -15,7 +15,7 @@
 %     You should have received a copy of the GNU General Public License
 %     along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-% November 6, 2021 05:58:07 PM CDT
+% November 6, 2021 09:07:59 PM CDT
 
 % NOTICE: This source code is Copyright (C) 2021  Kale Macormic and is
 % intended for AE525 Instructor/Grader use only. If you obtain this
@@ -26,37 +26,18 @@ clear all
 close all
 clc
 
-%% should be a callable function
-% use xlsread to bring the cross section data into MATLAB after asking for
-% its location using uigetfile
-[file,path] = uigetfile('*.xlsx');
-data = xlsread(sprintf('%s%s',path,file));
+% Use datafromsheet to collect all the data from the sheet and store it in
+% alldata
+alldata = datafromsheet;
 
-% obtain the required information from data and store it in variables to
-% ease calculations later and enhance code readabilty
-area = data(15,2);
-ybar = data(2,16);
-zbar = data(2,17);
-Iyy = data(2,18);
-Izz = data(2,19);
-Iyz = data(2,20);
-Itilda = data(2,21);
-% yeild = data(,);
-% ultimate = data(,);
-% modulus = data(,);
-% poisson = data(,);
-% shearmodulus = data(,);
-% and other material properties in the spreadsheet
-
-%% 
 % Calculate Deflection
-% [u,v,w] = deflection(area,ybar,...,Itilda)
+% [u,v,w] = deflection(alldata)
 
-% Calculate torsion
-% [phi,x] = torsion(area,ybar,...,Itilda)
+% Calculate angle of twist
+% [phi,x] = torsion(alldata)
 
 % Calculate neutral axis
-% [x,y,z] = neutral(area,ybar,...,Itilda)
+% [x,y,z] = neutral(alldata)
 
 % etc
 
