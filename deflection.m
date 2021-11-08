@@ -1,4 +1,4 @@
-function deflection_matrix = deflection(Pmax,Iyy,Izz,Iyz,Er,A_star,P,x0)
+function [u,v,w] = deflection(Pmax,Iyy,Izz,Iyz,Er,A_star,P,x0)
 
 I_tilde = Iyy * Izz - Iyz^2;
 My = 0;
@@ -105,8 +105,9 @@ u3(x) = int(du3);
 c1 = -1 * u3(0);
 u3(x) = u3(x) + c1;
 %------------------------------------------------------------------------
-%%Deflection matrix assembly
-deflection_matrix = [u1(x0) v1(x0) w1(x0);
-    u2(x0) v2(x0) w2(x0);
-    u3(x0) v3(x0) w3(x0)];
+%%Deflection matrices
+u = [u1(x0);u2(x0);u3(x0)];
+v = [v1(x0);v2(x0);v3(x0)];
+w = [w1(x0);w2(x0);w3(x0)];
+
 end
