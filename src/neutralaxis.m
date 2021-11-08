@@ -33,7 +33,7 @@ function [m,b] = neutralaxis(alldata)
 %     You should have received a copy of the GNU General Public License
 %     along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-% November 7, 2021 04:55:30 PM CST
+% November 7, 2021 08:14:28 PM CST
 
 % NOTICE: This source code is Copyright (C) 2021  Kale Macormic and is
 % intended for AE525 Instructor/Grader use only. If you obtain this
@@ -41,15 +41,15 @@ function [m,b] = neutralaxis(alldata)
 
 % Obtain the required values from alldata
 P = 0; % BUGBUG----(P isnt defined in the spreadsheet, so I am hardcoding
-My = 0; % BUGBUG----(My isnt defined in the spreadsheet, so I am hardcoding
-Mz = 1; % BUGBUG----(Mz isnt defined in the spreadsheet, so I am hardcoding
-A_star = alldata{}(,);
-Iyy_star = alldata{}(,);
-Izz_star = alldata{}(,);
-Iyz_star = alldata{}(,);
-Itilda_star = alldata{}(,);
+My = 0; % BUGBUG----(My isnt calculatable from the spreadsheet, so I am hardcoding
+Mz = 1; % BUGBUG----(Mz isnt calculatable from the spreadsheet, so I am hardcoding
+A_star = alldata{2}(8); % in^2
+Iyy_star = alldata{2}(3); % in^4
+Izz_star = alldata{2}(4); % in^4
+Iyz_star = alldata{2}(5); % in^4
+Itilda_star = alldata{2}(6); % in^8
 
 % calculate the slope "m" and the z intercept "b"
 m = (Mz*(Iyy_star) + My*(Iyz_star))/(My*(Izz_star) + Mz*(Iyz_star));
-b = (P*Itilda_star)/(Ai*(My(Izz_star) + Mz(Iyz_star))); % Due to Bug, this will always be 0
+b = (P*Itilda_star)/(A_star*(My*(Izz_star) + Mz*(Iyz_star))); % Due to Bug, this will always be 0
 end
