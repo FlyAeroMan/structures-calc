@@ -6,7 +6,7 @@ My = 0;
 %%Case 1: P == 0---------------------------------------------------------
 %deflection in the y direction
 syms x v0_dp1 dv1 v1
-Mz_0(x) = 5 * (x - x0);
+Mz_0(x) = 5 * (x - 45.625);
 v0_dp1 = (1/(Er * I_tilde)) * (Mz_0 * Iyy + My * Iyz);
 
 dv1(x) = int(v0_dp1);
@@ -40,7 +40,7 @@ u1(x) = u1(x) + c1;
 %%Case 2: P == 15---------------------------------------------------------
 %deflection in the y direction
 syms x v0_dp2 dv2 v2
-Mz_15(x) = -10 * (x - x0);
+Mz_15(x) = -10 * (x - 45.625);
 v0_dp2 = (1/(Er * I_tilde)) * (Mz_15 * Iyy + My * Iyz);
 
 dv2(x) = int(v0_dp2);
@@ -74,7 +74,7 @@ u2(x) = u2(x) + c1;
 %%Case 1: P == Pmax---------------------------------------------------------
 %deflection in the y direction
 syms x v0_dp3 dv3 v3
-Mz_max(x) = (-Pmax + 5) * (x - x0);
+Mz_max(x) = (-Pmax + 5) * (x - 45.625);
 v0_dp3 = (1/(Er * I_tilde)) * (Mz_max * Iyy + My * Iyz);
 
 dv3(x) = int(v0_dp3);
@@ -109,3 +109,4 @@ u3(x) = u3(x) + c1;
 deflection_matrix = [u1(x0) v1(x0) w1(x0);
     u2(x0) v2(x0) w2(x0);
     u3(x0) v3(x0) w3(x0)];
+end
