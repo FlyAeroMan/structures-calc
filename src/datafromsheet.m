@@ -64,6 +64,9 @@ function alldata = datafromsheet
 % intended for AE525 Instructor/Grader use only. If you obtain this
 % document in error destroy it immediately.
 
+% Alert User of progress
+fprintf('Gathering Data from spreadsheet...\n')
+
 % use xlsread to bring the cross section data into MATLAB after asking for
 % its location using uigetfile
 [file,path] = uigetfile('*.xlsx');
@@ -106,4 +109,7 @@ alldata{4}(2,2) = data(11,33); % TE Top Skin y Location (in)
 alldata{4}(2,3) = data(11,34); % TE Top Skin z Location (in)
 alldata{4}(2,4) = data(11,35); % TE Bottom Skin y Location (in)
 alldata{4}(2,5) = data(11,36); % TE Bottom Skin z Location (in)
+
+% Alert user of progress
+fprintf('Data Gathered.\n')
 end

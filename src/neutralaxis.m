@@ -1,4 +1,4 @@
-function [m,b] = neutralaxis(alldata)
+function [stressmaxlocal,m,b] = neutralaxis(alldata)
 % neutralaxis - a function which calculates the slope "m" and the z
 % intercept "b" of the equation "z=my+b" which is the neutral axis of a
 % particular cross section. The full equation is as follows:
@@ -16,7 +16,7 @@ function [m,b] = neutralaxis(alldata)
 % I~* is Iyy*(Izz*)-(Iyz)^2                                         (in^8)
 % y is a value along the Y-Axis (centroidal coord system)             (in)
 % z is a value along the Z-Axis (centroidal coord system)             (in)
-%FORMAT: alldata = datafromsheet
+%FORMAT: [stressmaxlocal,m,b] = neutralaxis(alldata)
 
 % Copyright (C) 2021  Kale Macormic
 %
@@ -39,6 +39,9 @@ function [m,b] = neutralaxis(alldata)
 % intended for AE525 Instructor/Grader use only. If you obtain this
 % document in error destroy it immediately.
 
+% Alert User of progress
+fprintf('Determining location of Neutral Axes...\n')
+
 % Obtain the required values from alldata
 P = 0; % BUGBUG----(P isnt defined in the spreadsheet, so I am hardcoding
 My = 0; % BUGBUG----(My isnt calculatable from the spreadsheet, so I am hardcoding
@@ -52,4 +55,11 @@ Itilda_star = alldata{2}(6); % in^8
 % calculate the slope "m" and the z intercept "b"
 m = (Mz*(Iyy_star) + My*(Iyz_star))/(My*(Izz_star) + Mz*(Iyz_star));
 b = (P*Itilda_star)/(A_star*(My*(Izz_star) + Mz*(Iyz_star))); % Due to Bug, this will always be 0
+
+% Alert user of progress
+fprintf('Neutral Axis Found.\n')
+
+% We now must call the function which finds the location of maximum stress
+% in the cross-section
+[stressmaxlocal] = maximumstresslocal(alldata,m,b);
 end
