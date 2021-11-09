@@ -38,6 +38,18 @@ function alldata = datafromsheet
 % alldata{4}(2,3) => TE Top Skin z Location (in)
 % alldata{4}(2,4) => TE Bottom Skin y Location (in)
 % alldata{4}(2,5) => TE Bottom Skin z Location (in)
+% All End Loads and Locations, as well as beam length are in alldata{5}
+% alldata{5}(:,1) => End Loads in the X Direction (lbf)
+% alldata{5}(:,2) => Y Position along the Y-Axis (in)
+% alldata{5}(:,3) => Z Position along the Z-Axis (in)
+% alldata{5}(:,4) => End Loads in the Y Direction (lbf)
+% alldata{5}(:,5) => Y Position along the Y-Axis (in)
+% alldata{5}(:,6) => Z Position along the Z-Axis (in)
+% alldata{5}(:,7) => End Loads in the Z Direction (lbf)
+% alldata{5}(:,8) => Y Position along the Y-Axis (in)
+% alldata{5}(:,9) => Z Position along the Z-Axis (in)
+% alldata{5}(1,10) => Length of the beam in X (in)
+% alldata{5}(2,10) => X position of End Loads (in)
 %
 % Note: ALL CHANGES to the spreadsheet require updates to this function.
 %
@@ -58,7 +70,7 @@ function alldata = datafromsheet
 %     You should have received a copy of the GNU General Public License
 %     along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-% November 6, 2021 09:05:19 PM CDT
+% November 8, 2021 07:07:17 PM CST
 
 % NOTICE: This source code is Copyright (C) 2021  Kale Macormic and is
 % intended for AE525 Instructor/Grader use only. If you obtain this
@@ -106,4 +118,16 @@ alldata{4}(2,2) = data(11,33); % TE Top Skin y Location (in)
 alldata{4}(2,3) = data(11,34); % TE Top Skin z Location (in)
 alldata{4}(2,4) = data(11,35); % TE Bottom Skin y Location (in)
 alldata{4}(2,5) = data(11,36); % TE Bottom Skin z Location (in)
+% All End Loads and Locations, as well as beam length are in alldata{5}
+alldata{5}(:,1) = data(1:14,40); % End Loads in the X Direction (lbf)
+alldata{5}(:,2) = data(1:14,41); % Y Position along the Y-Axis (in)
+alldata{5}(:,3) = data(1:14,42); % Z Position along the Z-Axis (in)
+alldata{5}(:,4) = data(1:14,43); % End Loads in the Y Direction (lbf)
+alldata{5}(:,5) = data(1:14,44); % Y Position along the Y-Axis (in)
+alldata{5}(:,6) = data(1:14,45); % Z Position along the Z-Axis (in)
+alldata{5}(:,7) = data(1:14,46); % End Loads in the Z Direction (lbf)
+alldata{5}(:,8) = data(1:14,47); % Y Position along the Y-Axis (in)
+alldata{5}(:,9) = data(1:14,48); % Z Position along the Z-Axis (in)
+alldata{5}(1,10) = data(1,49); % Length of the beam in X (in)
+alldata{5}(2,10) = data(3,49); % X position of End Loads (in)
 end
