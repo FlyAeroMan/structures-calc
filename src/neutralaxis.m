@@ -42,13 +42,20 @@ function [stressmaxlocal,m,b] = neutralaxis(alldata)
 % Alert User of progress
 fprintf('Determining location of Neutral Axes...\n')
 
-% Obtain the required values from alldata
-P = alldata{5}(1,1)+alldata{5}(2,1)+alldata{5}(3,1)+alldata{5}(4,1)...
+% Obtain Px from alldata
+Px = alldata{5}(1,1)+alldata{5}(2,1)+alldata{5}(3,1)+alldata{5}(4,1)...
     +alldata{5}(5,1)+alldata{5}(6,1)+alldata{5}(7,1)+alldata{5}(8,1)...
     +alldata{5}(9,1)+alldata{5}(10,1)+alldata{5}(11,1)+alldata{5}(12,1)...
     +alldata{5}(13,1)+alldata{5}(14,1);
-My = 0; % BUGBUG----(My isnt calculatable from the spreadsheet, so I am hardcoding
-Mz = 1; % BUGBUG----(Mz isnt calculatable from the spreadsheet, so I am hardcoding
+% If there are no X direction forces at the end of the beam, Px will be NaN
+% which will cause issues later so set it to zero if this occurs
+if isnan(Px)
+    Px=0;
+end
+
+% Obtain the other required values from alldata
+My = 0; % BUGBUG----(My isnt calculatable from the spreadsheet since we don't know Pmax, so I am hardcoding for a specific load case
+Mz = 1; % BUGBUG----(Mz isnt calculatable from the spreadsheet since we don't know Pmax, so I am hardcoding for a specific load case
 A_star = alldata{2}(8); % in^2
 Iyy_star = alldata{2}(3); % in^4
 Izz_star = alldata{2}(4); % in^4
@@ -57,7 +64,7 @@ Itilda_star = alldata{2}(6); % in^8
 
 % calculate the slope "m" and the z intercept "b"
 m = (Mz*(Iyy_star) + My*(Iyz_star))/(My*(Izz_star) + Mz*(Iyz_star));
-b = (P*Itilda_star)/(A_star*(My*(Izz_star) + Mz*(Iyz_star))); % Due to Bug, this will always be 0
+b = (Px*Itilda_star)/(A_star*(My*(Izz_star) + Mz*(Iyz_star))); % Due to Bug, this will always be 0
 
 % Alert user of progress
 fprintf('Neutral Axis Found.\n')
