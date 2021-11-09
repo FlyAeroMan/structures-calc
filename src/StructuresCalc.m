@@ -34,10 +34,10 @@ alldata = datafromsheet;
 [stressmaxlocal,m,b] = neutralaxis(alldata);
 
 % Calculate Deflection
-[u,v,w] = deflection(alldata{Pmax},alldata{2}(3),alldata{2}(4),alldata{2}(5),alldata{2}(7),alldata{2}(8),alldata{Px},46);
+%[u,v,w] = deflection(alldata{Pmax},alldata{2}(3),alldata{2}(4),alldata{2}(5),alldata{2}(7),alldata{2}(8),alldata{Px},46);
 
 % Calculate angle of twist
-theta = torsion(alldata{Pmax},alldata{2}(2),46);
+%theta = torsion(alldata{Pmax},alldata{2}(2),46);
 
 % etc
 

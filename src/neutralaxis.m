@@ -43,7 +43,10 @@ function [stressmaxlocal,m,b] = neutralaxis(alldata)
 fprintf('Determining location of Neutral Axes...\n')
 
 % Obtain the required values from alldata
-P = 0; % BUGBUG----(P isnt defined in the spreadsheet, so I am hardcoding
+P = alldata{5}(1,1)+alldata{5}(2,1)+alldata{5}(3,1)+alldata{5}(4,1)...
+    +alldata{5}(5,1)+alldata{5}(6,1)+alldata{5}(7,1)+alldata{5}(8,1)...
+    +alldata{5}(9,1)+alldata{5}(10,1)+alldata{5}(11,1)+alldata{5}(12,1)...
+    +alldata{5}(13,1)+alldata{5}(14,1);
 My = 0; % BUGBUG----(My isnt calculatable from the spreadsheet, so I am hardcoding
 Mz = 1; % BUGBUG----(Mz isnt calculatable from the spreadsheet, so I am hardcoding
 A_star = alldata{2}(8); % in^2
