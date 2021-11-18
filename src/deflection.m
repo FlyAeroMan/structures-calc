@@ -1,4 +1,10 @@
-function [u,v,w] = deflection(Pmax,Iyy,Izz,Iyz,Er,A_star,P,x0)
+function [u,v,w] = deflection(Pmax,alldata,P,x0)
+Iyy = alldata{2}(3);
+Izz = alldata{2}(4);
+Iyz = alldata{2}(5);
+Er = alldata{2}(7);
+A_star = alldata{2}(8);
+
 
 I_tilde = Iyy * Izz - Iyz^2;
 My = 0;
