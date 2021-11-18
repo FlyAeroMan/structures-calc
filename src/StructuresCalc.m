@@ -34,7 +34,7 @@ alldata = datafromsheet;
 % [u,v,w] = deflection(alldata)
 
 % Calculate angle of twist
-% [phi,x] = torsion(alldata)
+theta = torsion(Pmax,alldata,46)
 
 % Calculate neutral axis
 % [x,y,z] = neutral(alldata)
