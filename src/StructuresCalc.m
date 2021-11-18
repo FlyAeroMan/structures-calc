@@ -31,7 +31,7 @@ clc
 alldata = datafromsheet;
 
 % Calculate Deflection
-% [u,v,w] = deflection(alldata)
+[u,v,w] = deflection(Pmax,alldata,0,46)
 
 % Calculate angle of twist
 % [phi,x] = torsion(alldata)
