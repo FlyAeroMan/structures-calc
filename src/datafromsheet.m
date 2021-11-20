@@ -70,11 +70,14 @@ function alldata = datafromsheet
 %     You should have received a copy of the GNU General Public License
 %     along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-% November 8, 2021 07:07:17 PM CST
+% November 8, 2021 07:26:14 PM CST
 
 % NOTICE: This source code is Copyright (C) 2021  Kale Macormic and is
 % intended for AE525 Instructor/Grader use only. If you obtain this
 % document in error destroy it immediately.
+
+% Alert User of progress
+fprintf('Gathering Data from spreadsheet...\n')
 
 % use xlsread to bring the cross section data into MATLAB after asking for
 % its location using uigetfile
@@ -130,4 +133,7 @@ alldata{5}(:,8) = data(1:14,47); % Y Position along the Y-Axis (in)
 alldata{5}(:,9) = data(1:14,48); % Z Position along the Z-Axis (in)
 alldata{5}(1,10) = data(1,49); % Length of the beam in X (in)
 alldata{5}(2,10) = data(3,49); % X position of End Loads (in)
+
+% Alert user of progress
+fprintf('Data Gathered.\n')
 end
