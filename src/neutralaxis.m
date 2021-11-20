@@ -54,8 +54,8 @@ if isnan(Px)
 end
 
 % Obtain the other required values from alldata
-My = 0; % BUGBUG----(My isnt calculatable from the spreadsheet since we don't know Pmax, so I am hardcoding for a specific load case
-Mz = 1; % BUGBUG----(Mz isnt calculatable from the spreadsheet since we don't know Pmax, so I am hardcoding for a specific load case
+My = 0; % BUGBUG----(My isnt calculatable from the spreadsheet since we cannot integrate, so I am hardcoding for a specific load case
+Mz = 1; % BUGBUG----(Mz isnt calculatable from the spreadsheet since we cannot integrate, so I am hardcoding for a specific load case
 A_star = alldata{2}(8); % in^2
 Iyy_star = alldata{2}(3); % in^4
 Izz_star = alldata{2}(4); % in^4

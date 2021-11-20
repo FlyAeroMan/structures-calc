@@ -152,6 +152,8 @@ else
     fprintf('ERROR: TE or LE Infinifty Slope Error. Check Inputs and try again\nWARNING: Unstable solution generated for location of maximum stress on the top surface,\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n')
 end
 
+%% Top Surface
+
 % Find the point on the Top surface that is the farthest away from the
 % neutral axis
 if TopIntersectZ == TopIntersectZCheck
@@ -169,51 +171,153 @@ if TopIntersectZ == TopIntersectZCheck
     % Now we can find the farthest point from the neutral axis on the top
     % surface:
     if TopIntersectLocal == 1
-        fprintf('ERROR: Code does not Exist for this case (1 Top), please submit an issue in the repo')
-    elseif TopIntersectLocal == 2
-        if mneutralinf == false
-            % In this case, where the intersection of the neutral axis and
-            % the top surface is downstream of the TE, the slope of the
-            % neutral axis must be negative for it to both be within the
-            % cross section and intersect downstream. Since the Neutral
-            % axis's slope is negative and not infinity, and it is within
-            % the cross-section, meaning in this case, regardless if the
-            % top surface's slope is positive, negative, or infinity, the
-            % farthest point from the neutral axis is always the LE point
-            % on the top surface, therefore:
-            stressmaxlocal(1) = LETopY;
-            stressmaxlocal(2) = LETopZ;%BUGBUG?---- what if the top surface is negative or positive like the neutral axis, look at this with fresh eyes!
-        elseif mtopinf == true
-            % In this case, where the neutral axis' slope is infinity and
-            % the top surface's slope is also infinity, the Top surfaces
-            % points are all equidistant from the neutral axis and the
-            % location of the maximum stress is at every point on the top
-            % surface, therefore:
+        % in this case we know that regardless of the slopes of the lines,
+        % they intersect upstream of the structure, so we should start at
+        % the TE, calculate the distance, then move a small increment
+        % towards the LE to confirm it is smaller (as a sanity check
+        % because it always should be) then proclaim the location is at the
+        % TE.
+        if mtopinf == false
+            ytop = (TETopZ - btop) / mtop;
+            ytopsmallstep = ((TETopZ - 0.001) - btop) / mtop;
+        else
+            ytop = TETopY;
+            ytopsmallstep = ytop;
+        end
+        yneutral = (TETopZ - bneutral) / mneutral;
+        yneutralsmallstep = ((TETopZ - 0.001) - bneutral) / mneutral;
+        delta = ytop - yneutral;
+        deltasmallstep = ytopsmallstep - yneutralsmallstep;
+        if abs(delta) > abs(deltasmallstep)
+            stressmaxlocal(1) = TETopY;
+            stressmaxlocal(2) = TETopZ;
+        else
+            fprintf('ERROR: Neutral Axis Distance Error, Unable to Verify Farthest Distance From Neutral Axis (Top, Upstream)\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n')
             stressmaxlocal(1) = 0; % written as 0 for stability
             stressmaxlocal(2) = 0; % written as 0 for stability
-            
-            % Alert the user of this 
-            fprintf('>>>>>>>>Result: The Neutral Axis and Top surface are Parallel! All points along the top surface are points of maximum stress!\n')
+        end
+    elseif TopIntersectLocal == 2
+        % in this case we know that regardless of the slopes of the lines,
+        % they intersect downstream of the structure, so we should start at
+        % the LE, calculate the distance, then move a small increment
+        % towards the TE to confirm it is smaller (as a sanity check
+        % because it always should be) then proclaim the location is at the
+        % LE.
+        if mtopinf == false
+            ytop = (LETopZ - btop) / mtop;
+            ytopsmallstep = ((LETopZ - 0.001) - btop) / mtop;
+        else
+            ytop = LETopY;
+            ytopsmallstep = ytop;
+        end
+        yneutral = (LETopZ - bneutral) / mneutral;
+        yneutralsmallstep = ((LETopZ - 0.001) - bneutral) / mneutral;
+        delta = ytop - yneutral;
+        deltasmallstep = ytopsmallstep - yneutralsmallstep;
+        if abs(delta) > abs(deltasmallstep)
+            stressmaxlocal(1) = LETopY;
+            stressmaxlocal(2) = LETopZ;
+        else
+            fprintf('ERROR: Neutral Axis Distance Error, Unable to Verify Farthest Distance From Neutral Axis (Top, Downstream)\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n')
+            stressmaxlocal(1) = 0; % written as 0 for stability
+            stressmaxlocal(2) = 0; % written as 0 for stability
         end
     else
-        fprintf('ERROR: Code does not Exist for this case (3 Top), please submit an issue in the repo')
+        fprintf('ERROR: Code does not Exist for this case (3 Top), please submit an issue in the repo\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n')
     end
 else
     % Alert User an error has occured:
     fprintf('ERROR: Unable to calculate intersection of neutral axis and Top Surface. Check Inputs and try again\nWARNING: Unstable solution generated for location of maximum stress on the top surface,\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n')
+    fprintf('Warning: The Top surface and Neutral Axis May be Parallel!\n')
     
     % For the top surface:
     stressmaxlocal(1) = 0; % written as 0 for stability
     stressmaxlocal(2) = 0; % written as 0 for stability
 end
+%% Bottom Surface
 
 % Find the point on the Bottom surface that is the farthest away from the
 % neutral axis
-% [some mathy code bits here]
+if BotIntersectZ == BotIntersectZCheck
+    % We know the location of the LE and TE of the beam's bottom surface so we
+    % must figure out where the intersection occurs: Upstream (1), 
+    % Downstream (2), or within the beam/on the surface (3).
+    if BotIntersectZ > LEBotZ
+        BotIntersectLocal = 1;
+    elseif BotIntersectZ < TEBotZ
+        BotIntersectLocal = 2;
+    else
+        BotIntersectLocal = 3;
+    end
+    
+    % Now we can find the farthest point from the neutral axis on the Bot
+    % surface:
+    if BotIntersectLocal == 1
+        % in this case we know that regardless of the slopes of the lines,
+        % they intersect upstream of the structure, so we should start at
+        % the TE, calculate the distance, then move a small increment
+        % towards the LE to confirm it is smaller (as a sanity check
+        % because it always should be) then proclaim the location is at the
+        % TE.
+        if mbotinf == false
+            ybot = (TEBotZ - bbot) / mbot;
+            ybotsmallstep = ((TEBotZ - 0.001) - bbot) / mbot;
+        else
+            ybot = TEBotY;
+            ybotsmallstep = ybot;
+        end
+        yneutral = (TEBotZ - bneutral) / mneutral;
+        yneutralsmallstep = ((TEBotZ - 0.001) - bneutral) / mneutral;
+        delta = ybot - yneutral;
+        deltasmallstep = ybotsmallstep - yneutralsmallstep;
+        if abs(delta) > abs(deltasmallstep)
+            stressmaxlocal(1) = TEBotY;
+            stressmaxlocal(2) = TEBotZ;
+        else
+            fprintf('ERROR: Neutral Axis Distance Error, Unable to Verify Farthest Distance From Neutral Axis (Bot, Upstream)\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n')
+            stressmaxlocal(1) = 0; % written as 0 for stability
+            stressmaxlocal(2) = 0; % written as 0 for stability
+        end
+    elseif BotIntersectLocal == 2
+        % in this case we know that regardless of the slopes of the lines,
+        % they intersect downstream of the structure, so we should start at
+        % the LE, calculate the distance, then move a small increment
+        % towards the TE to confirm it is smaller (as a sanity check
+        % because it always should be) then proclaim the location is at the
+        % LE.
+        if mbotinf == false
+            ybot = (LEBotZ - bbot) / mbot;
+            ybotsmallstep = ((LEBotZ - 0.001) - bbot) / mbot;
+        else
+            ybot = LEBotY;
+            ybotsmallstep = ybot;
+        end
+        yneutral = (LEBotZ - bneutral) / mneutral;
+        yneutralsmallstep = ((LEBotZ - 0.001) - bneutral) / mneutral;
+        delta = ybot - yneutral;
+        deltasmallstep = ybotsmallstep - yneutralsmallstep;
+        if abs(delta) > abs(deltasmallstep)
+            stressmaxlocal(3) = LEBotY;
+            stressmaxlocal(4) = LEBotZ;
+        else
+            fprintf('ERROR: Neutral Axis Distance Error, Unable to Verify Farthest Distance From Neutral Axis (Bottom, Downstream)\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n')
+            stressmaxlocal(3) = 0; % written as 0 for stability
+            stressmaxlocal(4) = 0; % written as 0 for stability
+        end
+    else
+        fprintf('ERROR: Code does not Exist for this case (3 Bot), please submit an issue in the repo\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n')
+    end
+else
+    % Alert User an error has occured:
+    fprintf('ERROR: Unable to calculate intersection of neutral axis and Bot Surface. Check Inputs and try again\nWARNING: Unstable solution generated for location of maximum stress on the bot surface,\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n')
+    fprintf('Warning: The Bot surface and Neutral Axis May be Parallel!\n')
+    
+    % For the bot surface:
+    stressmaxlocal(1) = 0; % written as 0 for stability
+    stressmaxlocal(2) = 0; % written as 0 for stability
+end
+%% Plot
 
-% For the bottom surface:
-stressmaxlocal(3) = 0; % y value of maximum stress in centroidal axes      -->Temp note: mathy code bits above will determine the value now written as 0
-stressmaxlocal(4) = 0; % z value of maximum stress in centroidal axes      -->Temp note: mathy code bits above will determine the value now written as 0
 
 % Generate a Plot showing the Top, Bottom, Front, and Back surfaces and
 % the points of maximum stress for visual review
@@ -226,9 +330,9 @@ ZLE = mLE * Y + bLE;
 ZTE = mTE * Y + bTE;
 %plot(Y,Zneutral,'',Y,Ztop,'',Y,Zbot,'',Y,ZLE,'',Y,ZTE,'') % More general,
 %needs data
-plot(Y,Zneutral,Y,Zbot,Y,ZLE,Y,ZTE) % Hacky late night soln, delete.
-legend
-xline(LETopY)
+plot(Y,Zneutral,'-',Y,Zbot,'-',Y,ZLE,'-',Y,ZTE,'-',stressmaxlocal(1),stressmaxlocal(2),'d',stressmaxlocal(3),stressmaxlocal(4),'d')
+xline(LETopY);
+legend('Neutral Axis','Bottom Surface','Leading Edge','Trailing Edge','Top Maximum Bending Stress','Bottom Maximum Bending Stress','Top Surface')
 xlim([-3 3])
 ylim([-3 3])
 
