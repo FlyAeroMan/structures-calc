@@ -30,14 +30,14 @@ clc
 % alldata
 alldata = datafromsheet;
 
+% Calculate neutral axis
+[stressmaxlocal,m,b] = neutralaxis(alldata);
+
 % Calculate Deflection
-% [u,v,w] = deflection(alldata)
+%[u,v,w] = deflection(alldata{Pmax},alldata{2}(3),alldata{2}(4),alldata{2}(5),alldata{2}(7),alldata{2}(8),alldata{Px},46);
 
 % Calculate angle of twist
-% [phi,x] = torsion(alldata)
-
-% Calculate neutral axis
-% [x,y,z] = neutral(alldata)
+%theta = torsion(alldata{Pmax},alldata{2}(2),46);
 
 % etc
 
