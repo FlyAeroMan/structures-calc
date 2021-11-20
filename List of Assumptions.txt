@@ -1,0 +1,15 @@
+List of Assumptions:
+•	Negligible weight
+•	Potted Ends don’t Contribute to calculations
+•	Isotropic, Heterogeneous, Elastic
+•	Prismatic, Thin-Walled, Semi-Monocoque Member
+•	σxx >> σyy & σzz
+•	Plane Cross-Sections perpendicular to the Longitudinal axis remain plane & perpendicular to the deformed longitudinal axis
+•	ΔT = 0
+•	Plane Cross-Sections Warp
+•	Warping Is Unconstrained
+•	Warping Displacements are small
+•	Projection of the Warped Cross-Sections on y-z Plane is the same on the Original Cross-Section
+•	Projection of the Warped Cross-Section rotate on the rigid plane
+•	Angle of Rotation, φ, for a Cross-Section is a Constant
+•	Shear Flow is Constant
