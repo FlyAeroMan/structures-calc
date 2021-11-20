@@ -1,6 +1,8 @@
 List of Assumptions:
-•	Negligible weight
+•	Negligible wieght (Gravity doesn't affect calculations)
+•	Glue is Weightless and holds bonds together perfectly
 •	Potted Ends don’t Contribute to calculations
+•	Expoxy is Weightless
 •	Isotropic, Heterogeneous, Elastic
 •	Prismatic, Thin-Walled, Monocoque Member
 •	σxx >> σyy & σzz
