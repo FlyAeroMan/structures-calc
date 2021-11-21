@@ -1,9 +1,13 @@
-function [u,v,w] = deflection(Pmax,alldata,P,x0)
+function [u,v,w] = deflection(Pmax,alldata)
+%function to calculate the end deflection for an advanced aerospace beam
+%with one fixed end
 Iyy = alldata{2}(3);
 Izz = alldata{2}(4);
 Iyz = alldata{2}(5);
 Er = alldata{2}(7);
 A_star = alldata{2}(8);
+P = alldata{5}(:,1);
+x0 = alldata{5}(2,10);
 
 
 I_tilde = Iyy * Izz - Iyz^2;
