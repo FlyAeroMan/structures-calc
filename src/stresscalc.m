@@ -1,4 +1,4 @@
-function stressmax = stresscalc(alldata,stressmaxlocal)
+function stressmax = stresscalc(alldata,stressmaxlocal,pmax)
 % stresscalc - a function which calculates the stress at a point on the
 % fixed end of a single celled advanced aerospace beam at two locations in
 % the cross section defined in stressmaxlocal. The equation is as follows:
@@ -26,7 +26,7 @@ function stressmax = stresscalc(alldata,stressmaxlocal)
 % Mz^T is the internal moment caused by deltaT                    (lbf*in)
 % P^T is the internal load caused by deltaT                          (lbf)
 % sigmaxx is the stress at a location(Centroidal coord system)  (lbf/in^2)
-%FORMAT: stressmax = stresscalc(alldata,stressmaxlocal)
+%FORMAT: stressmax = stresscalc(alldata,stressmaxlocal,pmax)
 
 % Copyright (C) 2021  Kale Macormic
 %
@@ -53,7 +53,7 @@ function stressmax = stresscalc(alldata,stressmaxlocal)
 fprintf('Determining Magnitude of Stresses on Top and Bottom Surfaces...\n')
 
 % Obtain required values from alldata
-P = 22.8805; %(lbf)
+P = pmax; %(lbf)
 My = 0; %BUGBUG-- need way to integrate
 Mz = 0; %BUGBUG-- HARDCODED BELOW
 A_star = alldata{2}(8);

@@ -34,7 +34,7 @@ alldata = datafromsheet;
 [pmax,stressmaxlocal] = findpmax(alldata);
 
 % Calculate the stress at pmax
-stressmax = stresscalc(alldata,stressmaxlocal);
+stressmax = stresscalc(alldata,stressmaxlocal,pmax);
 
 % Calculate Deflection
 %[u,v,w] = deflection(input vars);
