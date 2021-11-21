@@ -1,6 +1,7 @@
 function [u,v,w] = deflection(Pmax,alldata)
 %function to calculate the end deflection for an advanced aerospace beam
 %with one fixed end
+%Cameron Cropper
 Iyy = alldata{2}(3);
 Izz = alldata{2}(4);
 Iyz = alldata{2}(5);
