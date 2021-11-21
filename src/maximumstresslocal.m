@@ -179,13 +179,13 @@ if TopIntersectZ == TopIntersectZCheck
         % TE.
         if mtopinf == false
             ytop = (TETopZ - btop) / mtop;
-            ytopsmallstep = ((TETopZ - 0.001) - btop) / mtop;
+            ytopsmallstep = ((TETopZ + 0.001) - btop) / mtop;
         else
             ytop = TETopY;
             ytopsmallstep = ytop;
         end
         yneutral = (TETopZ - bneutral) / mneutral;
-        yneutralsmallstep = ((TETopZ - 0.001) - bneutral) / mneutral;
+        yneutralsmallstep = ((TETopZ + 0.001) - bneutral) / mneutral;
         delta = ytop - yneutral;
         deltasmallstep = ytopsmallstep - yneutralsmallstep;
         if abs(delta) > abs(deltasmallstep)
@@ -223,7 +223,21 @@ if TopIntersectZ == TopIntersectZCheck
             stressmaxlocal(2) = 0; % written as 0 for stability
         end
     else
-        fprintf('ERROR: Code does not Exist for this case (3 Top), please submit an issue in the repo\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n')
+        % In this case we know that the lines intersect somewhere between
+        % the LE and TE. We know when linear lines intersect, the further
+        % away we go from the point of intersection the farther they are
+        % from each other by observation, therefore if the LE is farther
+        % than the point of maximum stress on the top surface is at the
+        % LE and vice versa.
+        deltaLE = LETopZ-TopIntersectZ;
+        deltaTE = TETopZ-TopIntersectZ;
+        if abs(deltaLE) > abs(deltaTE)
+            stressmaxlocal(1) = LETopY;
+            stressmaxlocal(2) = LETopZ;
+        else
+            stressmaxlocal(1) = TETopY;
+            stressmaxlocal(2) = TETopZ;
+        end
     end
 else
     % Alert User an error has occured:
@@ -261,13 +275,13 @@ end
         % TE.
         if mbotinf == false
             ybot = (TEBotZ - bbot) / mbot;
-            ybotsmallstep = ((TEBotZ - 0.001) - bbot) / mbot;
+            ybotsmallstep = ((TEBotZ + 0.001) - bbot) / mbot;
         else
             ybot = TEBotY;
             ybotsmallstep = ybot;
         end
         yneutral = (TEBotZ - bneutral) / mneutral;
-        yneutralsmallstep = ((TEBotZ - 0.001) - bneutral) / mneutral;
+        yneutralsmallstep = ((TEBotZ + 0.001) - bneutral) / mneutral;
         delta = ybot - yneutral;
         deltasmallstep = ybotsmallstep - yneutralsmallstep;
         if abs(delta) > abs(deltasmallstep)
@@ -305,7 +319,21 @@ end
             stressmaxlocal(4) = 0; % written as 0 for stability
         end
     else
-        fprintf('ERROR: Code does not Exist for this case (3 Bot), please submit an issue in the repo\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n')
+        % In this case we know that the lines intersect somewhere between
+        % the LE and TE. We know when linear lines intersect, the further
+        % away we go from the point of intersection the farther they are
+        % from each other by observation, therefore if the LE is farther
+        % than the point of maximum stress on the bottom surface is at the
+        % LE and vice versa.
+        deltaLE = LEBotZ-BotIntersectZ;
+        deltaTE = TEBotZ-BotIntersectZ;
+        if abs(deltaLE) > abs(deltaTE)
+            stressmaxlocal(3) = LEBotY;
+            stressmaxlocal(4) = LEBotZ;
+        else
+            stressmaxlocal(3) = TEBotY;
+            stressmaxlocal(4) = TEBotZ;
+        end
     end
 % %else
 %     % Alert User an error has occured:

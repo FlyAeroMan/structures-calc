@@ -12,11 +12,11 @@ Iyy_star = alldata{2}(3);
 Iyz_star = alldata{2}(5);
 ybar = abs(alldata{3}(1));
 zbar = abs(alldata{3}(2));
-lengthtop = alldata{4}(1,3)-alldata{4}(2,3);
+lengthtop = alldata{4}(1,3)-alldata{4}(2,3)-0.25;
 
 % initialize xprime for later
 xprime = Xo;
 
 % Calculate force in Top Skin:
-Ftopskin = ((tskin*((pmax-5)*xprime)*Etop)/(ER*Itilda_star))*(Iyz_star*((lengthtop^2/2)-(3.75-zbar)*lengthtop)-ybar*Iyy_star*lengthtop);
+Ftopskin = ((tskin*((pmax-5)*xprime)*Etop)/(ER*Itilda_star))*(Iyz_star*((lengthtop^2/2)-(3.5-zbar)*lengthtop)-ybar*Iyy_star*lengthtop);
 end
