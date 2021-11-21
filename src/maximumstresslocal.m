@@ -238,7 +238,7 @@ end
 
 % Find the point on the Bottom surface that is the farthest away from the
 % neutral axis
-if BotIntersectZ == BotIntersectZCheck
+%if BotIntersectZ == BotIntersectZCheck
     % We know the location of the LE and TE of the beam's bottom surface so we
     % must figure out where the intersection occurs: Upstream (1), 
     % Downstream (2), or within the beam/on the surface (3).
@@ -307,15 +307,15 @@ if BotIntersectZ == BotIntersectZCheck
     else
         fprintf('ERROR: Code does not Exist for this case (3 Bot), please submit an issue in the repo\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n')
     end
-else
-    % Alert User an error has occured:
-    fprintf('ERROR: Unable to calculate intersection of neutral axis and Bot Surface. Check Inputs and try again\nWARNING: Unstable solution generated for location of maximum stress on the bot surface,\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n')
-    fprintf('Warning: The Bot surface and Neutral Axis May be Parallel!\n')
-    
-    % For the bot surface:
-    stressmaxlocal(1) = 0; % written as 0 for stability
-    stressmaxlocal(2) = 0; % written as 0 for stability
-end
+% %else
+%     % Alert User an error has occured:
+%     fprintf('ERROR: Unable to calculate intersection of neutral axis and Bottom Surface. Check Inputs and try again\nWARNING: Unstable solution generated for location of maximum stress on the bot surface,\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n')
+%     fprintf('Warning: The Bot surface and Neutral Axis May be Parallel!\n')
+%     
+%     % For the bot surface:
+%     stressmaxlocal(3) = 0; % written as 0 for stability
+%     stressmaxlocal(4) = 0; % written as 0 for stability
+%end
 %% Plot
 
 
