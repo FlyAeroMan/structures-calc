@@ -53,7 +53,7 @@ function stressmax = stresscalc(alldata,stressmaxlocal)
 fprintf('Determining Magnitude of Stresses on Top and Bottom Surfaces...\n')
 
 % Obtain required values from alldata
-P = 15; %(lbf)
+P = 22.8805; %(lbf)
 My = 0; %BUGBUG-- need way to integrate
 Mz = 0; %BUGBUG-- HARDCODED BELOW
 A_star = alldata{2}(8);
@@ -79,7 +79,7 @@ sigmaxxtop = (Etop/(ER*Itilda_star))*(-P+5)*(-45.625)*(ztop*Iyz_star-ytop*Iyy_st
 sigmaxxbot = (Ebot/(ER*Itilda_star))*(-P+5)*(-45.625)*(zbot*Iyz_star-ybot*Iyy_star);
 
 % determine the highest sigmaxx
-if abs(sigmaxxtop) > abs(sigmaxxbot)
+if sigmaxxtop > sigmaxxbot
     stressmax = sigmaxxtop;
 else
     stressmax = sigmaxxbot;
