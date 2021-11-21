@@ -1,6 +1,7 @@
-function theta = torsion(Pmax,alldata,x0)
+function theta = torsion(Pmax,alldata)
 z_bar = alldata{2}(2);
 A_hat = 4.1171875;
+x0 = alldata{5}(1,10)
 G = 36000;
 
 %%Case 1: P == 0---------------------------------------------------------
