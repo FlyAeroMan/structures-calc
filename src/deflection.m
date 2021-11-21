@@ -8,7 +8,7 @@ Iyz = alldata{2}(5);
 Er = alldata{2}(7);
 A_star = alldata{2}(8);
 P = alldata{5}(:,1);
-x0 = alldata{5}(2,10);
+x0 = alldata{5}(1,10);
 
 
 I_tilde = Iyy * Izz - Iyz^2;
