@@ -285,12 +285,12 @@ end
         delta = ybot - yneutral;
         deltasmallstep = ybotsmallstep - yneutralsmallstep;
         if abs(delta) > abs(deltasmallstep)
-            stressmaxlocal(1) = TEBotY;
-            stressmaxlocal(2) = TEBotZ;
+            stressmaxlocal(3) = TEBotY;
+            stressmaxlocal(4) = TEBotZ;
         else
             fprintf('ERROR: Neutral Axis Distance Error, Unable to Verify Farthest Distance From Neutral Axis (Bot, Upstream)\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n')
-            stressmaxlocal(1) = 0; % written as 0 for stability
-            stressmaxlocal(2) = 0; % written as 0 for stability
+            stressmaxlocal(3) = 0; % written as 0 for stability
+            stressmaxlocal(4) = 0; % written as 0 for stability
         end
     elseif BotIntersectLocal == 2
         % in this case we know that regardless of the slopes of the lines,
