@@ -86,5 +86,5 @@ else
 end
 
 % Alert user of progress
-fprintf('Magnitude of Stresses Found.\n')
+fprintf('Magnitude of Stresses Found.\n\n')
 end

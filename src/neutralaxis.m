@@ -67,7 +67,7 @@ m = (Mz*(Iyy_star) + My*(Iyz_star))/(My*(Izz_star) + Mz*(Iyz_star));
 b = (Px*Itilda_star)/(A_star*(My*(Izz_star) + Mz*(Iyz_star))); % Due to Bug, this will always be 0
 
 % Alert user of progress
-fprintf('Neutral Axis Found.\n')
+fprintf('Neutral Axis Found.\n\n')
 
 % We now must call the function which finds the location of maximum stress
 % in the cross-section

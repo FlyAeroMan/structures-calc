@@ -62,12 +62,12 @@ pmaxbot = (yieldbot/(((Ebot*Xo)/(ER*Itilda_star))*(zbot*Iyz_star - ybot*Iyy_star
 % determine the lower pmax (that is when it will break)
 if abs(pmaxtop) < abs(pmaxbot)
     pmax = pmaxtop;
-    fprintf('The maximum value of P is limited by the top surface\n')
+    fprintf('The maximum value of P is limited by the TOP SURFACE\n')
 else
     pmax = pmaxbot;
-    fprintf('The maximum value of P is limited by the bottom surface\n')
+    fprintf('The maximum value of P is limited by the BOTTOM SURFACE\n')
 end
 
 % Alert user of progress
-fprintf('Magnitude of pmax Found.\n')
+fprintf('Magnitude of pmax Found.\n\n')
 end
