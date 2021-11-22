@@ -50,21 +50,27 @@ sigmaxxLE = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprime)*(zLETop*Iyz_star-yLETop*
 sigmaxxTE = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprime)*(zTETop*Iyz_star-yTETop*Iyy_star);
 
 % Calculate force in Top Skin:
-Ftopskin = thickskin*lengthtop*((sigmaxxLE + sigmaxxTE)/2);
+Ftopskin = abs(thickskin*lengthtop*((sigmaxxLE + sigmaxxTE)/2));
 
-% Hardcoding the centroid location of the stringers
-%yTopStringercentroid1 = abs(ybar)+0.25; %BUGBUG-- retrieve stringer centroid from alldata
-%zTopStringercentroid1 = abs(zbar)-0.0625; %BUGBUG-- retrieve stringer centroid from alldata
-% ADD MORE STRINGERS AS REQUIRED
-
-% Calculating stress at the centroid
-%sigmaxxTopStringer1 = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprime)*(zTopStringercentroid1*Iyz_star-yTopStringercentroid1*Iyy_star);
-% ADD MORE STRINGERS AS REQUIRED
-
-% Calculate force in stringer:
-%Ftopstringer1 = sigmaxxTopStringer1*0.125^2;
-%Ftopstringer = Ftopstringer1; % + Ftopstringer2;
-Ftopstringer = 0;
+% Determine if the number of stringers supporting the skin is greater than
+% zero or zero.
+if topstringercount == 0
+    % If there are no stringers supporting the skin, Ftopstringer = 0
+    Ftopstringer = 0;
+else
+    % Hardcoding the centroid location of the stringers
+    %yTopStringercentroid1 = abs(ybar)+0.25; %BUGBUG-- retrieve stringer centroid from alldata
+    %zTopStringercentroid1 = abs(zbar)-0.0625; %BUGBUG-- retrieve stringer centroid from alldata
+    % ADD MORE STRINGERS MANUALLY AS REQUIRED
+    
+    % Calculating stress at the centroid
+    %sigmaxxTopStringer1 = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprime)*(zTopStringercentroid1*Iyz_star-yTopStringercentroid1*Iyy_star);
+    % ADD MORE STRINGERS MANUALLY AS REQUIRED
+    
+    % Calculate force in stringer:
+    %Ftopstringer1 = sigmaxxTopStringer1*0.125^2;
+    %Ftopstringer = Ftopstringer1; % + Ftopstringer2;
+end
 
 % Calculate Nx
 Nx = (1/lengthtop)*(Ftopskin+Ftopstringer);
@@ -75,6 +81,15 @@ x = (((12*Nx*lengthtop^4)*(s-stringerwidth+stringerwidth*(thickskin/(thickskin+s
 v = lengthtop^4;
 aone = sqrt((-x+sqrt(x^2-4*v))/(2));
 atwo = sqrt((-x-sqrt(x^2-4*v))/(2));
+
+% Generate plot for manual Review
+a = linspace(-4,4,2000);
+Ncr = (pi.^2 ./ lengthtop.^2)*((a ./ lengthtop)+(lengthtop ./ a)).^2 .*((Etop .* s .* (thickskin).^3) ./ (12 .* (s-stringerwidth+stringerwidth .* (thickskin ./ (thickskin+stringerwidth)).^3)));
+plot(a,Ncr)
+title('TOP SURFACE')
+xlim([0,4])
+ylim([0,300])
+yline(Nx);
 
 % Check to see if the above numbers are imaginary, if so exit this loop as
 % the distance between ribs cannot be negative, the user should add more
@@ -114,21 +129,39 @@ sigmaxxLE = (Ebot/(ER*Itilda_star))*(-pmax+5)*(-xprime)*(zLEBot*Iyz_star-yLEBot*
 sigmaxxTE = (Ebot/(ER*Itilda_star))*(-pmax+5)*(-xprime)*(zTEBot*Iyz_star-yTEBot*Iyy_star);
 
 % Calculate force in Bottom Skin:
-Fbotskin = thickskin*lengthtop*((sigmaxxLE + sigmaxxTE)/2);
+Fbotskin = abs(thickskin*lengthtop*((sigmaxxLE + sigmaxxTE)/2));
 
-% Hardcoding the centroid location of the stringers
-yBotStringercentroid1 = alldata{6}(22,1);
-zBotStringercentroid1 = alldata{6}(22,2);
-% ADD MORE STRINGERS AS REQUIRED
-
-% Calculating stress at the centroid
-sigmaxxBotStringer1 = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprime)*(zBotStringercentroid1*Iyz_star-yBotStringercentroid1*Iyy_star);
-% ADD MORE STRINGERS AS REQUIRED
-
-% Calculate force in stringer:
-Fbotstringer1 = sigmaxxBotStringer1*0.125*0.375;
-Fbotstringer = Fbotstringer1; % + Fbotstringer2;
-% Fbotstringer = 0;
+% Determine if the number of stringers supporting the skin is greater than
+% zero or zero.
+if botstringercount == 0
+    % If there are no stringers supporting the skin, Fbotstringer = 0
+    Fbotstringer = 0;
+else
+    if botstringercount ~= 1
+        fprintf('WARNING: THE NUMBER OF STRINGERS IN CODE FOR THE BOTTOM SURFACE REQUIRES UPDATES\n')
+    end
+    % Hardcoding the centroid location of the stringers
+    yBotStringercentroid1 = alldata{6}(22,1);
+    zBotStringercentroid1 = alldata{6}(22,2);
+    %yBotStringercentroid2 = alldata{6}(23,1);
+    %zBotStringercentroid2 = alldata{6}(23,2);
+    %yBotStringercentroid3 = alldata{6}(24,1);
+    %zBotStringercentroid3 = alldata{6}(24,2);
+    % ADD MORE STRINGERS MANUALLY AS REQUIRED
+    
+    % Calculating stress at the centroid
+    sigmaxxBotStringer1 = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprime)*(zBotStringercentroid1*Iyz_star-yBotStringercentroid1*Iyy_star);
+    %sigmaxxBotStringer2 = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprime)*(zBotStringercentroid2*Iyz_star-yBotStringercentroid2*Iyy_star);
+    %sigmaxxBotStringer3 = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprime)*(zBotStringercentroid3*Iyz_star-yBotStringercentroid3*Iyy_star);
+    % ADD MORE STRINGERS MANUALLY AS REQUIRED
+    
+    % Calculate force in stringer:
+    Fbotstringer1 = sigmaxxBotStringer1*stringerwidth*stringerwidth;
+    %Fbotstringer2 = sigmaxxBotStringer2*stringerwidth*stringerwidth;
+    %Fbotstringer3 = sigmaxxBotStringer3*stringerwidth*stringerwidth;
+    Fbotstringer = Fbotstringer1; %+ Fbotstringer2 + Fbotstringer3;
+    % ADD MORE STRINGERS MANUALLY AS REQUIRED
+end
 
 % Calculate Nx
 Nx = (1/lengthbot)*(Fbotskin+Fbotstringer);
@@ -165,6 +198,15 @@ else
 end
 itr = itr + 1;
 end
+
+% Generate plot for manual Review
+a = linspace(-4,4,2000);
+Ncr = (pi.^2 ./ lengthbot.^2)*((a ./ lengthbot)+(lengthbot ./ a)).^2 .*((Ebot .* s .* (thickskin).^3) ./ (12 .* (s-stringerwidth+stringerwidth .* (thickskin ./ (thickskin+stringerwidth)).^3)));
+plot(a,Ncr)
+title('BOTTOM SURFACE')
+xlim([0,4])
+ylim([0,300])
+yline(Nx);
 
 % Determine which surface requires more ribs and output that
 % Inform the user of that decision
