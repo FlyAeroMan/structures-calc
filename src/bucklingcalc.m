@@ -7,7 +7,7 @@ function riblocal = bucklingcalc(alldata,pmax)
 fprintf('Determining Rib spacing...\n')
 
 % Obtain values from alldata
-thickskin = alldata{6}(1,3); %                         (in)
+thickskin = alldata{6}(1,3); %                     (in)
 stringerwidth = alldata{6}(2,3); %                 (in)
 sparwidth = alldata{6}(3,3); %                     (in)
 topstringercount = alldata{6}(4,3);
@@ -38,7 +38,7 @@ yLEBot = abs(ybar)-1.4990086973; %BUGBUG-- retrieve from alldata?
 zTEBot = abs(zbar)-sparwidth-lengthtop;
 yTEBot = abs(ybar)-0.565675364; %BUGBUG-- retrieve from alldata?
 
-% initialize loop vars
+% initialize loop vars---------------------TOP-----------------------------
 xprime = Xo;
 itr = 1;
 imaginary = false;
@@ -50,6 +50,7 @@ sigmaxxLE = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprime)*(zLETop*Iyz_star-yLETop*
 sigmaxxTE = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprime)*(zTETop*Iyz_star-yTETop*Iyy_star);
 
 % Calculate force in Top Skin:
+% Correct for the negative compression value by taking the absolute value
 Ftopskin = abs(thickskin*lengthtop*((sigmaxxLE + sigmaxxTE)/2));
 
 % Determine if the number of stringers supporting the skin is greater than
@@ -79,11 +80,11 @@ Nx = (1/lengthtop)*(Ftopskin+Ftopstringer);
 s = lengthtop/(topstringercount +1);
 x = (((12*Nx*lengthtop^4)*(s-stringerwidth+stringerwidth*(thickskin/(thickskin+stringerwidth))^3))/(pi^2*Etop*s*thickskin^3))-2*lengthtop^2;
 v = lengthtop^4;
-aone = sqrt((-x+sqrt(x^2-4*v))/(2));
-atwo = sqrt((-x-sqrt(x^2-4*v))/(2));
+aone = sqrt((x+sqrt(x^2-4*v))/(2));
+atwo = sqrt((x-sqrt(x^2-4*v))/(2));
 
 % Generate plot for manual Review
-a = linspace(-4,4,2000);
+a = linspace(0,8,2000);
 Ncr = (pi.^2 ./ lengthtop.^2)*((a ./ lengthtop)+(lengthtop ./ a)).^2 .*((Etop .* s .* (thickskin).^3) ./ (12 .* (s-stringerwidth+stringerwidth .* (thickskin ./ (thickskin+stringerwidth)).^3)));
 plot(a,Ncr)
 title('TOP SURFACE')
@@ -96,28 +97,34 @@ yline(Nx);
 % stringers to support their design.
 if ~(isreal(aone))
     imaginary = true;
-    fprintf('WARNING: ADD STRINGERS TO THE TOP SURFACE!\n')
+    fprintf('WARNING: TOP SURFACE IMAGINARY VALUES!\n')
 elseif ~(isreal(atwo))
     imaginary = true;
-    fprintf('WARNING: ADD STRINGERS TO THE TOP SURFACE!\n')
+    fprintf('WARNING: TOP SURFACE IMAGINARY VALUES!\n')
 end
 
-% Determine the smaller value of a and call it ribspacing
+% Determine the smaller value of a and call it riblocal
 if aone < atwo
-    temp = aone*4;
-    temp = round(temp)/4;
+    temp = aone*8;
+    temp = floor(temp)/8;
     topriblocal(itr) = temp;
     xprime = xprime - temp;
+    if aone > xprime
+        imaginary = true;
+    end
 else
-    temp = atwo*4;
-    temp = round(temp)/4;
+    temp = atwo*8;
+    temp = floor(temp)/8;
     topriblocal(itr) = temp;
     xprime = xprime - temp;
+    if atwo > xprime
+        imaginary = true;
+    end
 end
 itr = itr + 1;
 end
 
-% Reset vars---------------------------------------------------------------
+% Reset vars---------------------------BOTTOM------------------------------
 xprime = Xo;
 itr = 1;
 imaginary = false;
@@ -129,6 +136,7 @@ sigmaxxLE = (Ebot/(ER*Itilda_star))*(-pmax+5)*(-xprime)*(zLEBot*Iyz_star-yLEBot*
 sigmaxxTE = (Ebot/(ER*Itilda_star))*(-pmax+5)*(-xprime)*(zTEBot*Iyz_star-yTEBot*Iyy_star);
 
 % Calculate force in Bottom Skin:
+% Correct for the negative compression value by taking the absolute value
 Fbotskin = abs(thickskin*lengthtop*((sigmaxxLE + sigmaxxTE)/2));
 
 % Determine if the number of stringers supporting the skin is greater than
@@ -170,43 +178,49 @@ Nx = (1/lengthbot)*(Fbotskin+Fbotstringer);
 s = lengthbot/(botstringercount +1);
 x = (((12*Nx*lengthbot^4)*(s-stringerwidth+stringerwidth*(thickskin/(thickskin+stringerwidth))^3))/(pi^2*Ebot*s*thickskin^3))-2*lengthbot^2;
 v = lengthbot^4;
-aone = sqrt((-x+sqrt(x^2-4*v))/(2));
-atwo = sqrt((-x-sqrt(x^2-4*v))/(2));
-
-% Check to see if the above numbers are imaginary, if so exit this loop as
-% the distance between ribs cannot be negative, the user should add more
-% stringers to support their design.
-if ~(isreal(aone))
-    imaginary = true;
-    fprintf('WARNING: ADD STRINGERS TO THE BOTTOM SURFACE!\n')
-elseif ~(isreal(atwo))
-    imaginary = true;
-    fprintf('WARNING: ADD STRINGERS TO THE BOTTOM SURFACE!\n')
-end
-
-% Determine the smaller value of a and call it ribspacing
-if aone < atwo
-    temp = aone*4;
-    temp = round(temp)/4;
-    botriblocal(itr) = temp;
-    xprime = xprime - temp;
-else
-    temp = atwo*4;
-    temp = round(temp)/4;
-    botriblocal(itr) = temp;
-    xprime = xprime - temp;
-end
-itr = itr + 1;
-end
+aone = sqrt((x+sqrt(x^2-4*v))/(2));
+atwo = sqrt((x-sqrt(x^2-4*v))/(2));
 
 % Generate plot for manual Review
-a = linspace(-4,4,2000);
+a = linspace(0,8,2000);
 Ncr = (pi.^2 ./ lengthbot.^2)*((a ./ lengthbot)+(lengthbot ./ a)).^2 .*((Ebot .* s .* (thickskin).^3) ./ (12 .* (s-stringerwidth+stringerwidth .* (thickskin ./ (thickskin+stringerwidth)).^3)));
 plot(a,Ncr)
 title('BOTTOM SURFACE')
 xlim([0,4])
 ylim([0,300])
 yline(Nx);
+
+% Check to see if the above numbers are imaginary, if so exit this loop as
+% the distance between ribs cannot be negative, the user should add more
+% stringers to support their design.
+if ~(isreal(aone))
+    imaginary = true;
+    fprintf('WARNING: BOTTOM SURFACE IMAGINARY VALUES!\n')
+elseif ~(isreal(atwo))
+    imaginary = true;
+    fprintf('WARNING: BOTTOM SURFACE IMAGINARY VALUES!\n')
+end
+
+% Determine the smaller value of a and call it riblocal
+if aone < atwo
+    temp = aone*8;
+    temp = floor(temp)/8;
+    botriblocal(itr) = temp;
+    xprime = xprime - temp;
+    if aone > xprime
+        imaginary = true;
+    end
+else
+    temp = atwo*8;
+    temp = floor(temp)/8;
+    botriblocal(itr) = temp;
+    xprime = xprime - temp;
+    if atwo > xprime
+        imaginary = true;
+    end
+end
+itr = itr + 1;
+end
 
 % Determine which surface requires more ribs and output that
 % Inform the user of that decision
