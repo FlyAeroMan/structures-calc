@@ -39,15 +39,15 @@ zTEBot = abs(zbar)-sparwidth-lengthtop;
 yTEBot = abs(ybar)-0.565675364; %BUGBUG-- retrieve from alldata?
 
 % initialize loop vars---------------------TOP-----------------------------
-xprime = Xo;
+xprimetop = Xo;
 itr = 1;
-imaginary = false;
+%imaginary = false;
 
 % Calculate the rib spacing needed for the top surface
-while xprime > 1 && imaginary == false
+while xprimetop > 1 %&& imaginary == false
 % Calculate the bending stress at the LE and TE of the top skin
-sigmaxxLE = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprime)*(zLETop*Iyz_star-yLETop*Iyy_star);
-sigmaxxTE = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprime)*(zTETop*Iyz_star-yTETop*Iyy_star);
+sigmaxxLE = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprimetop)*(zLETop*Iyz_star-yLETop*Iyy_star);
+sigmaxxTE = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprimetop)*(zTETop*Iyz_star-yTETop*Iyy_star);
 
 % Calculate force in Top Skin:
 % Correct for the negative compression value by taking the absolute value
@@ -59,18 +59,21 @@ if topstringercount == 0
     % If there are no stringers supporting the skin, Ftopstringer = 0
     Ftopstringer = 0;
 else
+    if topstringercount ~= 1
+        fprintf('WARNING: THE NUMBER OF STRINGERS IN CODE FOR THE TOP SURFACE REQUIRES UPDATES\n')
+    end
     % Hardcoding the centroid location of the stringers
-    %yTopStringercentroid1 = abs(ybar)+0.25; %BUGBUG-- retrieve stringer centroid from alldata
-    %zTopStringercentroid1 = abs(zbar)-0.0625; %BUGBUG-- retrieve stringer centroid from alldata
+    yTopStringercentroid1 = alldata{6}(8,1);
+    zTopStringercentroid1 = alldata{6}(8,2);
     % ADD MORE STRINGERS MANUALLY AS REQUIRED
     
     % Calculating stress at the centroid
-    %sigmaxxTopStringer1 = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprime)*(zTopStringercentroid1*Iyz_star-yTopStringercentroid1*Iyy_star);
+    sigmaxxTopStringer1 = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprimetop)*(zTopStringercentroid1*Iyz_star-yTopStringercentroid1*Iyy_star);
     % ADD MORE STRINGERS MANUALLY AS REQUIRED
     
     % Calculate force in stringer:
-    %Ftopstringer1 = sigmaxxTopStringer1*0.125^2;
-    %Ftopstringer = Ftopstringer1; % + Ftopstringer2;
+    Ftopstringer1 = sigmaxxTopStringer1*0.125^2;
+    Ftopstringer = Ftopstringer1; % + Ftopstringer2;
 end
 
 % Calculate Nx
@@ -96,11 +99,13 @@ yline(Nx);
 % the distance between ribs cannot be negative, the user should add more
 % stringers to support their design.
 if ~(isreal(aone))
-    imaginary = true;
+    %imaginary = true;
     fprintf('WARNING: TOP SURFACE IMAGINARY VALUES!\n')
+    break
 elseif ~(isreal(atwo))
-    imaginary = true;
+    %imaginary = true;
     fprintf('WARNING: TOP SURFACE IMAGINARY VALUES!\n')
+    break
 end
 
 % Determine the smaller value of a and call it riblocal
@@ -108,16 +113,16 @@ if aone < atwo
     temp = aone*8;
     temp = floor(temp)/8;
     topriblocal(itr) = temp;
-    xprime = xprime - temp;
-    if aone > xprime
+    xprimetop = xprimetop - temp;
+    if aone > xprimetop
         imaginary = true;
     end
 else
     temp = atwo*8;
     temp = floor(temp)/8;
     topriblocal(itr) = temp;
-    xprime = xprime - temp;
-    if atwo > xprime
+    xprimetop = xprimetop - temp;
+    if atwo > xprimetop
         imaginary = true;
     end
 end
@@ -125,15 +130,15 @@ itr = itr + 1;
 end
 
 % Reset vars---------------------------BOTTOM------------------------------
-xprime = Xo;
+xprimebot = Xo;
 itr = 1;
-imaginary = false;
+%imaginary = false;
 
 % Calculate the rib spacing needed for the bottom surface
-while xprime > 1 && imaginary == false
+while xprimebot > 1 %&& imaginary == false
 % Calculate the bending stress at the LE and TE of the top skin
-sigmaxxLE = (Ebot/(ER*Itilda_star))*(-pmax+5)*(-xprime)*(zLEBot*Iyz_star-yLEBot*Iyy_star);
-sigmaxxTE = (Ebot/(ER*Itilda_star))*(-pmax+5)*(-xprime)*(zTEBot*Iyz_star-yTEBot*Iyy_star);
+sigmaxxLE = (Ebot/(ER*Itilda_star))*(-pmax+5)*(-xprimebot)*(zLEBot*Iyz_star-yLEBot*Iyy_star);
+sigmaxxTE = (Ebot/(ER*Itilda_star))*(-pmax+5)*(-xprimebot)*(zTEBot*Iyz_star-yTEBot*Iyy_star);
 
 % Calculate force in Bottom Skin:
 % Correct for the negative compression value by taking the absolute value
@@ -145,29 +150,29 @@ if botstringercount == 0
     % If there are no stringers supporting the skin, Fbotstringer = 0
     Fbotstringer = 0;
 else
-    if botstringercount ~= 1
+    if botstringercount ~= 3
         fprintf('WARNING: THE NUMBER OF STRINGERS IN CODE FOR THE BOTTOM SURFACE REQUIRES UPDATES\n')
     end
     % Hardcoding the centroid location of the stringers
-    yBotStringercentroid1 = alldata{6}(22,1);
-    zBotStringercentroid1 = alldata{6}(22,2);
-    %yBotStringercentroid2 = alldata{6}(23,1);
-    %zBotStringercentroid2 = alldata{6}(23,2);
-    %yBotStringercentroid3 = alldata{6}(24,1);
-    %zBotStringercentroid3 = alldata{6}(24,2);
+%     yBotStringercentroid1 = alldata{6}(22,1);
+%     zBotStringercentroid1 = alldata{6}(22,2);
+%     yBotStringercentroid2 = alldata{6}(23,1);
+%     zBotStringercentroid2 = alldata{6}(23,2);
+%     yBotStringercentroid3 = alldata{6}(24,1);
+%     zBotStringercentroid3 = alldata{6}(24,2);
     % ADD MORE STRINGERS MANUALLY AS REQUIRED
     
     % Calculating stress at the centroid
-    sigmaxxBotStringer1 = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprime)*(zBotStringercentroid1*Iyz_star-yBotStringercentroid1*Iyy_star);
-    %sigmaxxBotStringer2 = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprime)*(zBotStringercentroid2*Iyz_star-yBotStringercentroid2*Iyy_star);
-    %sigmaxxBotStringer3 = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprime)*(zBotStringercentroid3*Iyz_star-yBotStringercentroid3*Iyy_star);
+%     sigmaxxBotStringer1 = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprimebot)*(zBotStringercentroid1*Iyz_star-yBotStringercentroid1*Iyy_star);
+%     sigmaxxBotStringer2 = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprimebot)*(zBotStringercentroid2*Iyz_star-yBotStringercentroid2*Iyy_star);
+%     sigmaxxBotStringer3 = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprimebot)*(zBotStringercentroid3*Iyz_star-yBotStringercentroid3*Iyy_star);
     % ADD MORE STRINGERS MANUALLY AS REQUIRED
     
     % Calculate force in stringer:
-    Fbotstringer1 = sigmaxxBotStringer1*stringerwidth*stringerwidth;
-    %Fbotstringer2 = sigmaxxBotStringer2*stringerwidth*stringerwidth;
-    %Fbotstringer3 = sigmaxxBotStringer3*stringerwidth*stringerwidth;
-    Fbotstringer = Fbotstringer1; %+ Fbotstringer2 + Fbotstringer3;
+%     Fbotstringer1 = sigmaxxBotStringer1*stringerwidth*stringerwidth;
+%     Fbotstringer2 = sigmaxxBotStringer2*stringerwidth*stringerwidth;
+%     Fbotstringer3 = sigmaxxBotStringer3*stringerwidth*stringerwidth;
+    Fbotstringer = Fbotstringer1 + Fbotstringer2 + Fbotstringer3;
     % ADD MORE STRINGERS MANUALLY AS REQUIRED
 end
 
@@ -194,11 +199,13 @@ yline(Nx);
 % the distance between ribs cannot be negative, the user should add more
 % stringers to support their design.
 if ~(isreal(aone))
-    imaginary = true;
+    %imaginary = true;
     fprintf('WARNING: BOTTOM SURFACE IMAGINARY VALUES!\n')
+    break
 elseif ~(isreal(atwo))
-    imaginary = true;
+    %imaginary = true;
     fprintf('WARNING: BOTTOM SURFACE IMAGINARY VALUES!\n')
+    break
 end
 
 % Determine the smaller value of a and call it riblocal
@@ -206,18 +213,15 @@ if aone < atwo
     temp = aone*8;
     temp = floor(temp)/8;
     botriblocal(itr) = temp;
-    xprime = xprime - temp;
-    if aone > xprime
+    xprimebot = xprimebot - temp;
+    if aone > xprimebot
         imaginary = true;
     end
 else
     temp = atwo*8;
     temp = floor(temp)/8;
     botriblocal(itr) = temp;
-    xprime = xprime - temp;
-    if atwo > xprime
-        imaginary = true;
-    end
+    xprimebot = xprimebot - temp;
 end
 itr = itr + 1;
 end
@@ -227,9 +231,11 @@ end
 if length(botriblocal) > length(topriblocal)
     riblocal = botriblocal;
     fprintf('The Number of Ribs is based on the BOTTOM SKIN\n')
+    fprintf('There is %.3fin of space between the last rib and the free end.\n',xprimebot)
 else
     riblocal = topriblocal;
     fprintf('The Number of Ribs is based on the TOP SKIN\n')
+    fprintf('There is %.3fin of space between the last rib and the free end.\n',xprimetop)
 end
 
 %Alert User of Progress
