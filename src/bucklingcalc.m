@@ -63,8 +63,8 @@ else
         fprintf('WARNING: THE NUMBER OF STRINGERS IN CODE FOR THE TOP SURFACE REQUIRES UPDATES\n')
     end
     % Hardcoding the centroid location of the stringers
-    yTopStringercentroid1 = alldata{6}(8,1);
-    zTopStringercentroid1 = alldata{6}(8,2);
+    yTopStringercentroid1 = alldata{6}(6,1);
+    zTopStringercentroid1 = alldata{6}(6,2);
     % ADD MORE STRINGERS MANUALLY AS REQUIRED
     
     % Calculating stress at the centroid
