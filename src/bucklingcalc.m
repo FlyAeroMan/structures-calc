@@ -154,25 +154,28 @@ else
         fprintf('WARNING: THE NUMBER OF STRINGERS IN CODE FOR THE BOTTOM SURFACE REQUIRES UPDATES\n')
     end
     % Hardcoding the centroid location of the stringers
-    yBotStringercentroid1 = abs(ybar_star) + alldata{6}(18,1);
-    zBotStringercentroid1 = abs(zbar_star) + alldata{6}(18,2);
-%     yBotStringercentroid2 = alldata{6}(23,1);
-%     zBotStringercentroid2 = alldata{6}(23,2);
-%     yBotStringercentroid3 = alldata{6}(24,1);
-%     zBotStringercentroid3 = alldata{6}(24,2);
+%     yBotStringercentroid1 = abs(ybar_star) + alldata{6}(18,1);%BUGBUGBUG-- For iterations before 007
+%     zBotStringercentroid1 = abs(zbar_star) + alldata{6}(18,2);%BUGBUGBUG-- For iterations before 007
+    yBotStringercentroid1 = abs(ybar_star) + -1.6328573042; %BUGBUGBUG-- Hardcoded Values after 007
+    zBotStringercentroid1 = abs(zbar_star) + -0.2294807982;
+%     yBotStringercentroid2 = abs(ybar_star) + alldata{6}(20,1);
+%     zBotStringercentroid2 = abs(zbar_star) + alldata{6}(20,2);
+%     yBotStringercentroid3 = abs(ybar_star) + alldata{6}(24,1);
+%     zBotStringercentroid3 = abs(zbar_star) + alldata{6}(24,2);
     % ADD MORE STRINGERS MANUALLY AS REQUIRED
     
     % Calculating stress at the centroid
-    sigmaxxBotStringer1 = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprimebot)*(zBotStringercentroid1*Iyz_star-yBotStringercentroid1*Iyy_star);
-%     sigmaxxBotStringer2 = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprimebot)*(zBotStringercentroid2*Iyz_star-yBotStringercentroid2*Iyy_star);
-%     sigmaxxBotStringer3 = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprimebot)*(zBotStringercentroid3*Iyz_star-yBotStringercentroid3*Iyy_star);
+    sigmaxxBotStringer1 = (Ebot/(ER*Itilda_star))*(-pmax+5)*(-xprimebot)*(zBotStringercentroid1*Iyz_star-yBotStringercentroid1*Iyy_star);
+%     sigmaxxBotStringer2 = (Ebot/(ER*Itilda_star))*(-pmax+5)*(-xprimebot)*(zBotStringercentroid2*Iyz_star-yBotStringercentroid2*Iyy_star);
+%     sigmaxxBotStringer3 = (Ebot/(ER*Itilda_star))*(-pmax+5)*(-xprimebot)*(zBotStringercentroid3*Iyz_star-yBotStringercentroid3*Iyy_star);
     % ADD MORE STRINGERS MANUALLY AS REQUIRED
     
     % Calculate force in stringer:
-    Fbotstringer1 = sigmaxxBotStringer1*stringerwidth*stringerwidth;
+    %Fbotstringer1 = sigmaxxBotStringer1*stringerwidth*stringerwidth; %BUGBUGBUG-- for iterations before 007
+    Fbotstringer1 = sigmaxxBotStringer1*0.03125; %BUGBUGBUG-- Hardcoded Values after 007
 %     Fbotstringer2 = sigmaxxBotStringer2*stringerwidth*stringerwidth;
 %     Fbotstringer3 = sigmaxxBotStringer3*stringerwidth*stringerwidth;
-    Fbotstringer = Fbotstringer1; %+ Fbotstringer2 + Fbotstringer3;
+    Fbotstringer = Fbotstringer1;% + Fbotstringer2;% + Fbotstringer3;
     % ADD MORE STRINGERS MANUALLY AS REQUIRED
 end
 
