@@ -86,25 +86,25 @@ v = lengthtop^4;
 aone = sqrt((x+sqrt(x^2-4*v))/(2));
 atwo = sqrt((x-sqrt(x^2-4*v))/(2));
 
-% Generate plot for manual Review
-a = linspace(0,8,2000);
-Ncr = (pi.^2 ./ lengthtop.^2)*((a ./ lengthtop)+(lengthtop ./ a)).^2 .*((Etop .* s .* (thickskin).^3) ./ (12 .* (s-stringerwidth+stringerwidth .* (thickskin ./ (thickskin+stringerwidth)).^3)));
-plot(a,Ncr)
-title('TOP SURFACE')
-xlim([0,4])
-ylim([0,300])
-yline(Nx);
+% % Generate plot for manual Review
+% a = linspace(0,8,2000);
+% Ncr = (pi.^2 ./ lengthtop.^2)*((a ./ lengthtop)+(lengthtop ./ a)).^2 .*((Etop .* s .* (thickskin).^3) ./ (12 .* (s-stringerwidth+stringerwidth .* (thickskin ./ (thickskin+stringerwidth)).^3)));
+% plot(a,Ncr)
+% title('TOP SURFACE')
+% xlim([0,4])
+% ylim([0,300])
+% yline(Nx);
 
 % Check to see if the above numbers are imaginary, if so exit this loop as
 % the distance between ribs cannot be negative, the user should add more
 % stringers to support their design.
 if ~(isreal(aone))
     %imaginary = true;
-    fprintf('WARNING: TOP SURFACE IMAGINARY VALUES!\n')
+    %fprintf('WARNING: TOP SURFACE IMAGINARY VALUES!\n')
     break
 elseif ~(isreal(atwo))
     %imaginary = true;
-    fprintf('WARNING: TOP SURFACE IMAGINARY VALUES!\n')
+    %fprintf('WARNING: TOP SURFACE IMAGINARY VALUES!\n')
     break
 end
 
@@ -150,12 +150,12 @@ if botstringercount == 0
     % If there are no stringers supporting the skin, Fbotstringer = 0
     Fbotstringer = 0;
 else
-    if botstringercount ~= 3
+    if botstringercount ~= 1
         fprintf('WARNING: THE NUMBER OF STRINGERS IN CODE FOR THE BOTTOM SURFACE REQUIRES UPDATES\n')
     end
     % Hardcoding the centroid location of the stringers
-%     yBotStringercentroid1 = alldata{6}(22,1);
-%     zBotStringercentroid1 = alldata{6}(22,2);
+    yBotStringercentroid1 = alldata{6}(18,1);
+    zBotStringercentroid1 = alldata{6}(18,2);
 %     yBotStringercentroid2 = alldata{6}(23,1);
 %     zBotStringercentroid2 = alldata{6}(23,2);
 %     yBotStringercentroid3 = alldata{6}(24,1);
@@ -163,16 +163,16 @@ else
     % ADD MORE STRINGERS MANUALLY AS REQUIRED
     
     % Calculating stress at the centroid
-%     sigmaxxBotStringer1 = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprimebot)*(zBotStringercentroid1*Iyz_star-yBotStringercentroid1*Iyy_star);
+    sigmaxxBotStringer1 = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprimebot)*(zBotStringercentroid1*Iyz_star-yBotStringercentroid1*Iyy_star);
 %     sigmaxxBotStringer2 = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprimebot)*(zBotStringercentroid2*Iyz_star-yBotStringercentroid2*Iyy_star);
 %     sigmaxxBotStringer3 = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprimebot)*(zBotStringercentroid3*Iyz_star-yBotStringercentroid3*Iyy_star);
     % ADD MORE STRINGERS MANUALLY AS REQUIRED
     
     % Calculate force in stringer:
-%     Fbotstringer1 = sigmaxxBotStringer1*stringerwidth*stringerwidth;
+    Fbotstringer1 = sigmaxxBotStringer1*stringerwidth*stringerwidth;
 %     Fbotstringer2 = sigmaxxBotStringer2*stringerwidth*stringerwidth;
 %     Fbotstringer3 = sigmaxxBotStringer3*stringerwidth*stringerwidth;
-    Fbotstringer = Fbotstringer1 + Fbotstringer2 + Fbotstringer3;
+    Fbotstringer = Fbotstringer1; %+ Fbotstringer2 + Fbotstringer3;
     % ADD MORE STRINGERS MANUALLY AS REQUIRED
 end
 
@@ -186,25 +186,25 @@ v = lengthbot^4;
 aone = sqrt((x+sqrt(x^2-4*v))/(2));
 atwo = sqrt((x-sqrt(x^2-4*v))/(2));
 
-% Generate plot for manual Review
-a = linspace(0,8,2000);
-Ncr = (pi.^2 ./ lengthbot.^2)*((a ./ lengthbot)+(lengthbot ./ a)).^2 .*((Ebot .* s .* (thickskin).^3) ./ (12 .* (s-stringerwidth+stringerwidth .* (thickskin ./ (thickskin+stringerwidth)).^3)));
-plot(a,Ncr)
-title('BOTTOM SURFACE')
-xlim([0,4])
-ylim([0,300])
-yline(Nx);
+% % Generate plot for manual Review
+% a = linspace(0,8,2000);
+% Ncr = (pi.^2 ./ lengthbot.^2)*((a ./ lengthbot)+(lengthbot ./ a)).^2 .*((Ebot .* s .* (thickskin).^3) ./ (12 .* (s-stringerwidth+stringerwidth .* (thickskin ./ (thickskin+stringerwidth)).^3)));
+% plot(a,Ncr)
+% title('BOTTOM SURFACE')
+% xlim([0,4])
+% ylim([0,300])
+% yline(Nx);
 
 % Check to see if the above numbers are imaginary, if so exit this loop as
 % the distance between ribs cannot be negative, the user should add more
 % stringers to support their design.
 if ~(isreal(aone))
     %imaginary = true;
-    fprintf('WARNING: BOTTOM SURFACE IMAGINARY VALUES!\n')
+    %fprintf('WARNING: BOTTOM SURFACE IMAGINARY VALUES!\n')
     break
 elseif ~(isreal(atwo))
     %imaginary = true;
-    fprintf('WARNING: BOTTOM SURFACE IMAGINARY VALUES!\n')
+    %fprintf('WARNING: BOTTOM SURFACE IMAGINARY VALUES!\n')
     break
 end
 
