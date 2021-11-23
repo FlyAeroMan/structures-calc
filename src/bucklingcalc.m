@@ -59,21 +59,25 @@ if topstringercount == 0
     % If there are no stringers supporting the skin, Ftopstringer = 0
     Ftopstringer = 0;
 else
-    if topstringercount ~= 1
+    if topstringercount ~= 2
         fprintf('WARNING: THE NUMBER OF STRINGERS IN CODE FOR THE TOP SURFACE REQUIRES UPDATES\n')
     end
     % Hardcoding the centroid location of the stringers
     yTopStringercentroid1 = abs(ybar_star) + alldata{6}(6,1);
     zTopStringercentroid1 = abs(zbar_star) + alldata{6}(6,2);
+    yTopStringercentroid2 = abs(ybar_star) + alldata{6}(6,1);
+    zTopStringercentroid2 = abs(zbar_star) + alldata{6}(6,2);
     % ADD MORE STRINGERS MANUALLY AS REQUIRED
     
     % Calculating stress at the centroid
     sigmaxxTopStringer1 = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprimetop)*(zTopStringercentroid1*Iyz_star-yTopStringercentroid1*Iyy_star);
+    sigmaxxTopStringer2 = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprimetop)*(zTopStringercentroid2*Iyz_star-yTopStringercentroid2*Iyy_star);
     % ADD MORE STRINGERS MANUALLY AS REQUIRED
     
     % Calculate force in stringer:
     Ftopstringer1 = sigmaxxTopStringer1*0.125^2;
-    Ftopstringer = Ftopstringer1; % + Ftopstringer2;
+    Ftopstringer2 = sigmaxxTopStringer2*0.125^2;
+    Ftopstringer = Ftopstringer1 + Ftopstringer2;
 end
 
 % Calculate Nx
