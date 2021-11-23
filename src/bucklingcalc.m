@@ -59,25 +59,25 @@ if topstringercount == 0
     % If there are no stringers supporting the skin, Ftopstringer = 0
     Ftopstringer = 0;
 else
-    if topstringercount ~= 2
+    if topstringercount ~= 1
         fprintf('WARNING: THE NUMBER OF STRINGERS IN CODE FOR THE TOP SURFACE REQUIRES UPDATES\n')
     end
     % Hardcoding the centroid location of the stringers
     yTopStringercentroid1 = abs(ybar_star) + alldata{6}(6,1);
     zTopStringercentroid1 = abs(zbar_star) + alldata{6}(6,2);
-    yTopStringercentroid2 = abs(ybar_star) + alldata{6}(6,1);
-    zTopStringercentroid2 = abs(zbar_star) + alldata{6}(6,2);
+%     yTopStringercentroid2 = abs(ybar_star) + alldata{6}(6,1);
+%     zTopStringercentroid2 = abs(zbar_star) + alldata{6}(6,2);
     % ADD MORE STRINGERS MANUALLY AS REQUIRED
     
     % Calculating stress at the centroid
     sigmaxxTopStringer1 = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprimetop)*(zTopStringercentroid1*Iyz_star-yTopStringercentroid1*Iyy_star);
-    sigmaxxTopStringer2 = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprimetop)*(zTopStringercentroid2*Iyz_star-yTopStringercentroid2*Iyy_star);
+%     sigmaxxTopStringer2 = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprimetop)*(zTopStringercentroid2*Iyz_star-yTopStringercentroid2*Iyy_star);
     % ADD MORE STRINGERS MANUALLY AS REQUIRED
     
     % Calculate force in stringer:
     Ftopstringer1 = sigmaxxTopStringer1*0.125^2;
-    Ftopstringer2 = sigmaxxTopStringer2*0.125^2;
-    Ftopstringer = Ftopstringer1 + Ftopstringer2;
+%     Ftopstringer2 = sigmaxxTopStringer2*0.125^2;
+    Ftopstringer = Ftopstringer1;% + Ftopstringer2;
 end
 
 % Calculate Nx
@@ -154,7 +154,7 @@ if botstringercount == 0
     % If there are no stringers supporting the skin, Fbotstringer = 0
     Fbotstringer = 0;
 else
-    if botstringercount ~= 1
+    if botstringercount ~= 2
         fprintf('WARNING: THE NUMBER OF STRINGERS IN CODE FOR THE BOTTOM SURFACE REQUIRES UPDATES\n')
     end
     % Hardcoding the centroid location of the stringers
@@ -162,24 +162,24 @@ else
 %     zBotStringercentroid1 = abs(zbar_star) + alldata{6}(18,2);%BUGBUGBUG-- For iterations before 007
     yBotStringercentroid1 = abs(ybar_star) + -1.6328573042; %BUGBUGBUG-- Hardcoded Values after 007
     zBotStringercentroid1 = abs(zbar_star) + -0.2294807982;
-%     yBotStringercentroid2 = abs(ybar_star) + alldata{6}(20,1);
-%     zBotStringercentroid2 = abs(zbar_star) + alldata{6}(20,2);
+    yBotStringercentroid2 = abs(ybar_star) + alldata{6}(21,1);
+    zBotStringercentroid2 = abs(zbar_star) + alldata{6}(21,2);
 %     yBotStringercentroid3 = abs(ybar_star) + alldata{6}(24,1);
 %     zBotStringercentroid3 = abs(zbar_star) + alldata{6}(24,2);
     % ADD MORE STRINGERS MANUALLY AS REQUIRED
     
     % Calculating stress at the centroid
     sigmaxxBotStringer1 = (Ebot/(ER*Itilda_star))*(-pmax+5)*(-xprimebot)*(zBotStringercentroid1*Iyz_star-yBotStringercentroid1*Iyy_star);
-%     sigmaxxBotStringer2 = (Ebot/(ER*Itilda_star))*(-pmax+5)*(-xprimebot)*(zBotStringercentroid2*Iyz_star-yBotStringercentroid2*Iyy_star);
+    sigmaxxBotStringer2 = (Ebot/(ER*Itilda_star))*(-pmax+5)*(-xprimebot)*(zBotStringercentroid2*Iyz_star-yBotStringercentroid2*Iyy_star);
 %     sigmaxxBotStringer3 = (Ebot/(ER*Itilda_star))*(-pmax+5)*(-xprimebot)*(zBotStringercentroid3*Iyz_star-yBotStringercentroid3*Iyy_star);
     % ADD MORE STRINGERS MANUALLY AS REQUIRED
     
     % Calculate force in stringer:
     %Fbotstringer1 = sigmaxxBotStringer1*stringerwidth*stringerwidth; %BUGBUGBUG-- for iterations before 007
     Fbotstringer1 = sigmaxxBotStringer1*0.03125; %BUGBUGBUG-- Hardcoded Values after 007
-%     Fbotstringer2 = sigmaxxBotStringer2*stringerwidth*stringerwidth;
+    Fbotstringer2 = sigmaxxBotStringer2*stringerwidth*stringerwidth;
 %     Fbotstringer3 = sigmaxxBotStringer3*stringerwidth*stringerwidth;
-    Fbotstringer = Fbotstringer1;% + Fbotstringer2;% + Fbotstringer3;
+    Fbotstringer = Fbotstringer1 + Fbotstringer2;% + Fbotstringer3;
     % ADD MORE STRINGERS MANUALLY AS REQUIRED
 end
 
