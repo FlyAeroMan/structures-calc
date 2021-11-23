@@ -19,24 +19,24 @@ ER = alldata{2}(7)*1000; %                         (psi)
 Itilda_star = alldata{2}(6); %                     (in^8)
 Iyy_star = alldata{2}(3); %                        (in^4)
 Iyz_star = alldata{2}(5); %                        (in^4)
-ybar = alldata{3}(1); %                            (in)
-zbar = alldata{3}(2); %                            (in)
+ybar_star = alldata{2}(1); %                       (in)
+zbar_star = alldata{2}(2); %                       (in)
 lengthtop = alldata{4}(1,3)-alldata{4}(2,3)-0.25; %(in)
 lengthbot = sqrt(1+lengthtop^2);%                  (in)
 
 % Define starting and stopping points of the length of the top skin (less
 % the spars)
-zLETop = abs(zbar)-sparwidth;
-yLETop = abs(ybar)+(thickskin/2);
-zTETop = abs(zbar)-sparwidth-lengthtop;
-yTETop = abs(ybar)+(thickskin/2);
+zLETop = abs(zbar_star)-sparwidth;
+yLETop = abs(ybar_star)+(thickskin/2);
+zTETop = abs(zbar_star)-sparwidth-lengthtop;
+yTETop = abs(ybar_star)+(thickskin/2);
 
 % Define starting and stopping points of the lengthof the bottom skin (less
 % the spars)
-zLEBot = abs(zbar)-sparwidth;
-yLEBot = abs(ybar)-1.4990086973; %BUGBUG-- retrieve from alldata?
-zTEBot = abs(zbar)-sparwidth-lengthtop;
-yTEBot = abs(ybar)-0.565675364; %BUGBUG-- retrieve from alldata?
+zLEBot = abs(zbar_star)-sparwidth;
+yLEBot = abs(ybar_star)-1.4990086973; %BUGBUG-- retrieve from alldata?
+zTEBot = abs(zbar_star)-sparwidth-lengthtop;
+yTEBot = abs(ybar_star)-0.565675364; %BUGBUG-- retrieve from alldata?
 
 % initialize loop vars---------------------TOP-----------------------------
 xprimetop = Xo;
@@ -63,8 +63,8 @@ else
         fprintf('WARNING: THE NUMBER OF STRINGERS IN CODE FOR THE TOP SURFACE REQUIRES UPDATES\n')
     end
     % Hardcoding the centroid location of the stringers
-    yTopStringercentroid1 = alldata{6}(6,1);
-    zTopStringercentroid1 = alldata{6}(6,2);
+    yTopStringercentroid1 = abs(ybar_star) + alldata{6}(6,1);
+    zTopStringercentroid1 = abs(zbar_star) + alldata{6}(6,2);
     % ADD MORE STRINGERS MANUALLY AS REQUIRED
     
     % Calculating stress at the centroid
@@ -154,8 +154,8 @@ else
         fprintf('WARNING: THE NUMBER OF STRINGERS IN CODE FOR THE BOTTOM SURFACE REQUIRES UPDATES\n')
     end
     % Hardcoding the centroid location of the stringers
-    yBotStringercentroid1 = alldata{6}(18,1);
-    zBotStringercentroid1 = alldata{6}(18,2);
+    yBotStringercentroid1 = abs(ybar_star) + alldata{6}(18,1);
+    zBotStringercentroid1 = abs(zbar_star) + alldata{6}(18,2);
 %     yBotStringercentroid2 = alldata{6}(23,1);
 %     zBotStringercentroid2 = alldata{6}(23,2);
 %     yBotStringercentroid3 = alldata{6}(24,1);
