@@ -161,13 +161,13 @@ else
 %     yBotStringercentroid1 = abs(ybar_star) + alldata{6}(18,1);%BUGBUGBUG-- For iterations before 007
 %     zBotStringercentroid1 = abs(zbar_star) + alldata{6}(18,2);%BUGBUGBUG-- For iterations before 007
     yBotStringercentroid1 = abs(ybar_star) - 1.6328573042; %BUGBUGBUG-- Hardcoded Values after 007
-    zBotStringercentroid1 = abs(zbar_star) - 0.2294807982;
+    zBotStringercentroid1 = abs(zbar_star) - 0.2294807982; %BUGBUGBUG-- Hardcoded Values after 007
     yBotStringercentroid2 = abs(ybar_star) + alldata{6}(21,1);
     zBotStringercentroid2 = abs(zbar_star) + alldata{6}(21,2);
-%     yBotStringercentroid3 = abs(ybar_star) + alldata{6}(22,1);%BUGBUGBUG-- For iterations before 015
-%     zBotStringercentroid3 = abs(zbar_star) + alldata{6}(22,2);%BUGBUGBUG-- For iterations before 015
-    yBotStringercentroid3 = abs(ybar_star) - 1.6006494729; %BUGBUGBUG-- Hardcoded Values after 0015
-    zBotStringercentroid3 = abs(zbar_star) - 0.3502601656;
+    yBotStringercentroid3 = abs(ybar_star) + alldata{6}(22,1);%BUGBUGBUG-- For iterations before 015
+    zBotStringercentroid3 = abs(zbar_star) + alldata{6}(22,2);%BUGBUGBUG-- For iterations before 015
+%     yBotStringercentroid3 = abs(ybar_star) - 1.6006494729; %BUGBUGBUG-- Hardcoded Values after 015
+%     zBotStringercentroid3 = abs(zbar_star) - 0.3502601656; %BUGBUGBUG-- Hardcoded Values after 015
 %     yBotStringercentroid4 = abs(ybar_star) + alldata{6}(23,1);
 %     zBotStringercentroid4 = abs(zbar_star) + alldata{6}(23,2);
     % ADD MORE STRINGERS MANUALLY AS REQUIRED
@@ -183,7 +183,8 @@ else
     %Fbotstringer1 = sigmaxxBotStringer1*stringerwidth*stringerwidth; %BUGBUGBUG-- for iterations before 007
     Fbotstringer1 = sigmaxxBotStringer1*0.03125; %BUGBUGBUG-- Hardcoded Values after 007
     Fbotstringer2 = sigmaxxBotStringer2*stringerwidth*stringerwidth;
-    Fbotstringer3 = sigmaxxBotStringer3*stringerwidth*stringerwidth;
+    Fbotstringer3 = sigmaxxBotStringer3*stringerwidth*stringerwidth; %BUGBUGBUG-- for iterations before 015
+%     Fbotstringer3 = sigmaxxBotStringer3*0.03125; %BUGBUGBUG-- Hardcoded Values after 015
 %     Fbotstringer4 = sigmaxxBotStringer4*stringerwidth*stringerwidth;
     Fbotstringer = Fbotstringer1 + Fbotstringer2 + Fbotstringer3;% + Fbotstringer4;
     % ADD MORE STRINGERS MANUALLY AS REQUIRED
