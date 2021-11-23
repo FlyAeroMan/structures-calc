@@ -118,7 +118,7 @@ if mtopinf == true
     % calculate the intersection:
     TopIntersectY = LETopY;
     TopIntersectZ = mneutral * TopIntersectY + bneutral;
-    TopIntersectZCheck = TopIntersectZ;
+    %TopIntersectZCheck = TopIntersectZ;
 else
     btop = LETopZ - mtop * LETopY;
     
@@ -126,14 +126,14 @@ else
     % surface lines and work backwards to find the location of maximum stress.
         TopIntersectY = (bneutral - btop)/(mtop - mneutral);
         TopIntersectZ = mtop * TopIntersectY + btop;
-        TopIntersectZCheck = mneutral * TopIntersectY + bneutral;
+        %TopIntersectZCheck = mneutral * TopIntersectY + bneutral;
 end
 if mbotinf == true
     % if the slope is infinity, we can skip this step and directly
     % calculate the intersection:
     BotIntersectY = LEBotY;
     BotIntersectZ = mneutral * BotIntersectY + bneutral;
-    TopIntersectZCheck = BotIntersectZ;
+    %BotIntersectZCheck = BotIntersectZ;
 else
     bbot = LEBotZ - mbot * LEBotY;
     
@@ -141,7 +141,7 @@ else
     % surface lines and work backwards to find the location of maximum stress.
         BotIntersectY = (bneutral - bbot)/(mbot - mneutral);
         BotIntersectZ = mbot * BotIntersectY + bbot;
-        BotIntersectZCheck = mneutral * BotIntersectY + bneutral;
+        %BotIntersectZCheck = mneutral * BotIntersectY + bneutral;
 end
 % The LE and TE Shouldn't be infinity in this coord system, therefore:
 if mLEinf == false && mTEinf == false
@@ -156,7 +156,7 @@ end
 
 % Find the point on the Top surface that is the farthest away from the
 % neutral axis
-if TopIntersectZ == TopIntersectZCheck
+%if TopIntersectZ == TopIntersectZCheck
     % We know the location of the LE and TE of the beam's top surface so we
     % must figure out where the intersection occurs: Upstream (1), 
     % Downstream (2), or within the beam/on the surface (3).
@@ -179,13 +179,13 @@ if TopIntersectZ == TopIntersectZCheck
         % TE.
         if mtopinf == false
             ytop = (TETopZ - btop) / mtop;
-            ytopsmallstep = ((TETopZ - 0.001) - btop) / mtop;
+            ytopsmallstep = ((TETopZ + 0.001) - btop) / mtop;
         else
             ytop = TETopY;
             ytopsmallstep = ytop;
         end
         yneutral = (TETopZ - bneutral) / mneutral;
-        yneutralsmallstep = ((TETopZ - 0.001) - bneutral) / mneutral;
+        yneutralsmallstep = ((TETopZ + 0.001) - bneutral) / mneutral;
         delta = ytop - yneutral;
         deltasmallstep = ytopsmallstep - yneutralsmallstep;
         if abs(delta) > abs(deltasmallstep)
@@ -223,22 +223,36 @@ if TopIntersectZ == TopIntersectZCheck
             stressmaxlocal(2) = 0; % written as 0 for stability
         end
     else
-        fprintf('ERROR: Code does not Exist for this case (3 Top), please submit an issue in the repo\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n')
+        % In this case we know that the lines intersect somewhere between
+        % the LE and TE. We know when linear lines intersect, the further
+        % away we go from the point of intersection the farther they are
+        % from each other by observation, therefore if the LE is farther
+        % than the point of maximum stress on the top surface is at the
+        % LE and vice versa.
+        deltaLE = LETopZ-TopIntersectZ;
+        deltaTE = TETopZ-TopIntersectZ;
+        if abs(deltaLE) > abs(deltaTE)
+            stressmaxlocal(1) = LETopY;
+            stressmaxlocal(2) = LETopZ;
+        else
+            stressmaxlocal(1) = TETopY;
+            stressmaxlocal(2) = TETopZ;
+        end
     end
-else
-    % Alert User an error has occured:
-    fprintf('ERROR: Unable to calculate intersection of neutral axis and Top Surface. Check Inputs and try again\nWARNING: Unstable solution generated for location of maximum stress on the top surface,\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n')
-    fprintf('Warning: The Top surface and Neutral Axis May be Parallel!\n')
-    
-    % For the top surface:
-    stressmaxlocal(1) = 0; % written as 0 for stability
-    stressmaxlocal(2) = 0; % written as 0 for stability
-end
+% else
+%     % Alert User an error has occured:
+%     fprintf('ERROR: Unable to calculate intersection of neutral axis and Top Surface. Check Inputs and try again\nWARNING: Unstable solution generated for location of maximum stress on the top surface,\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n')
+%     fprintf('Warning: The Top surface and Neutral Axis May be Parallel!\n')
+%     
+%     % For the top surface:
+%     stressmaxlocal(1) = 0; % written as 0 for stability
+%     stressmaxlocal(2) = 0; % written as 0 for stability
+% end
 %% Bottom Surface
 
 % Find the point on the Bottom surface that is the farthest away from the
 % neutral axis
-if BotIntersectZ == BotIntersectZCheck
+% if BotIntersectZ == BotIntersectZCheck
     % We know the location of the LE and TE of the beam's bottom surface so we
     % must figure out where the intersection occurs: Upstream (1), 
     % Downstream (2), or within the beam/on the surface (3).
@@ -261,22 +275,22 @@ if BotIntersectZ == BotIntersectZCheck
         % TE.
         if mbotinf == false
             ybot = (TEBotZ - bbot) / mbot;
-            ybotsmallstep = ((TEBotZ - 0.001) - bbot) / mbot;
+            ybotsmallstep = ((TEBotZ + 0.001) - bbot) / mbot;
         else
             ybot = TEBotY;
             ybotsmallstep = ybot;
         end
         yneutral = (TEBotZ - bneutral) / mneutral;
-        yneutralsmallstep = ((TEBotZ - 0.001) - bneutral) / mneutral;
+        yneutralsmallstep = ((TEBotZ + 0.001) - bneutral) / mneutral;
         delta = ybot - yneutral;
         deltasmallstep = ybotsmallstep - yneutralsmallstep;
         if abs(delta) > abs(deltasmallstep)
-            stressmaxlocal(1) = TEBotY;
-            stressmaxlocal(2) = TEBotZ;
+            stressmaxlocal(3) = TEBotY;
+            stressmaxlocal(4) = TEBotZ;
         else
             fprintf('ERROR: Neutral Axis Distance Error, Unable to Verify Farthest Distance From Neutral Axis (Bot, Upstream)\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n')
-            stressmaxlocal(1) = 0; % written as 0 for stability
-            stressmaxlocal(2) = 0; % written as 0 for stability
+            stressmaxlocal(3) = 0; % written as 0 for stability
+            stressmaxlocal(4) = 0; % written as 0 for stability
         end
     elseif BotIntersectLocal == 2
         % in this case we know that regardless of the slopes of the lines,
@@ -305,17 +319,31 @@ if BotIntersectZ == BotIntersectZCheck
             stressmaxlocal(4) = 0; % written as 0 for stability
         end
     else
-        fprintf('ERROR: Code does not Exist for this case (3 Bot), please submit an issue in the repo\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n')
+        % In this case we know that the lines intersect somewhere between
+        % the LE and TE. We know when linear lines intersect, the further
+        % away we go from the point of intersection the farther they are
+        % from each other by observation, therefore if the LE is farther
+        % than the point of maximum stress on the bottom surface is at the
+        % LE and vice versa.
+        deltaLE = LEBotZ-BotIntersectZ;
+        deltaTE = TEBotZ-BotIntersectZ;
+        if abs(deltaLE) > abs(deltaTE)
+            stressmaxlocal(3) = LEBotY;
+            stressmaxlocal(4) = LEBotZ;
+        else
+            stressmaxlocal(3) = TEBotY;
+            stressmaxlocal(4) = TEBotZ;
+        end
     end
-else
-    % Alert User an error has occured:
-    fprintf('ERROR: Unable to calculate intersection of neutral axis and Bot Surface. Check Inputs and try again\nWARNING: Unstable solution generated for location of maximum stress on the bot surface,\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n')
-    fprintf('Warning: The Bot surface and Neutral Axis May be Parallel!\n')
-    
-    % For the bot surface:
-    stressmaxlocal(1) = 0; % written as 0 for stability
-    stressmaxlocal(2) = 0; % written as 0 for stability
-end
+% else
+%     % Alert User an error has occured:
+%     fprintf('ERROR: Unable to calculate intersection of neutral axis and Bottom Surface. Check Inputs and try again\nWARNING: Unstable solution generated for location of maximum stress on the bot surface,\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n>>>>>>>>>>DO NOT USE THE CURRENT RESULTS<<<<<<<<<<\n')
+%     fprintf('Warning: The Bot surface and Neutral Axis May be Parallel!\n')
+%     
+%     % For the bot surface:
+%     stressmaxlocal(3) = 0; % written as 0 for stability
+%     stressmaxlocal(4) = 0; % written as 0 for stability
+% end
 %% Plot
 
 
@@ -337,7 +365,7 @@ xlim([-3 3])
 ylim([-3 3])
 
 % Alert User of progress
-fprintf('The locations of Maximum Stress in an arbitrary cross section somewhere along the beam Found.\n')
+fprintf('The locations of Maximum Stress in an arbitrary cross section somewhere along the beam Found.\n\n')
 end
 
 

@@ -33,6 +33,12 @@ alldata = datafromsheet;
 % Calculate pmax
 [pmax,stressmaxlocal] = findpmax(alldata);
 
+% Calculate the stress at pmax
+stressmax = stresscalc(alldata,stressmaxlocal,pmax);
+
+% Calculate Rib Spacing
+riblocal = bucklingcalc(alldata,pmax);
+
 % Calculate Deflection
 %[u,v,w] = deflection(input vars);
 

@@ -6,14 +6,14 @@ function [stressmaxlocal,m,b] = neutralaxis(alldata)
 % Z = [-------------------]y - [-----------------------], where:
 %     [My(Izz*) + Mz(Iyz*)]    [A*(My(Izz*) + Mz(Iyz*))]
 %
-% P is the external end load along the X-Axis in the x direction     (lbf)
+% P is the internal load along the X-Axis in the x direction         (lbf)
 % My is the internal moment about the Y-Axis                      (lbf*in)
 % Mz is the internal moment about the Z-Axis                      (lbf*in)
 % A* is the modulus weighted area of the cross section              (in^2)
 % Iyy* is the Modulus weighted Moment of Inertia about the Y-Axis   (in^4)
 % Izz* is the Modulus weighted Moment of Inertia about the Z-Axis   (in^4)
 % Iyz* is the Modulus weighted Product of Inertia                   (in^4)
-% I~* is Iyy*(Izz*)-(Iyz)^2                                         (in^8)
+% I~* is (Iyy*)(Izz*)-(Iyz*)^2                                      (in^8)
 % y is a value along the Y-Axis (centroidal coord system)             (in)
 % z is a value along the Z-Axis (centroidal coord system)             (in)
 %FORMAT: [stressmaxlocal,m,b] = neutralaxis(alldata)
@@ -67,7 +67,7 @@ m = (Mz*(Iyy_star) + My*(Iyz_star))/(My*(Izz_star) + Mz*(Iyz_star));
 b = (Px*Itilda_star)/(A_star*(My*(Izz_star) + Mz*(Iyz_star))); % Due to Bug, this will always be 0
 
 % Alert user of progress
-fprintf('Neutral Axis Found.\n')
+fprintf('Neutral Axis Found.\n\n')
 
 % We now must call the function which finds the location of maximum stress
 % in the cross-section

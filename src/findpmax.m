@@ -37,11 +37,11 @@ function [pmax,stressmaxlocal] = findpmax(alldata)
 fprintf('Determining magnitude of pmax...\n')
 
 % obtain values from alldata
-Etop = alldata{1}(1,1);
-Ebot = alldata{1}(2,1);
-ER = alldata{2}(7);
-yieldtop = alldata{1}(1,3); %Compressive
-yieldbot = alldata{1}(2,2); %Tensile
+Etop = alldata{1}(1,1)*1000; %(psi)
+Ebot = alldata{1}(2,1)*1000; %(psi)
+ER = alldata{2}(7)*1000; %    (psi)
+yieldtop = alldata{1}(1,3)*1000; %Compressive  (psi)
+yieldbot = alldata{1}(2,2)*1000; %Tensile      (psi)
 Iyy_star = alldata{2}(3);
 Iyz_star = alldata{2}(5);
 Itilda_star = alldata{2}(6);
@@ -60,14 +60,14 @@ pmaxtop = (yieldtop/(((Etop*Xo)/(ER*Itilda_star))*(ztop*Iyz_star - ytop*Iyy_star
 pmaxbot = (yieldbot/(((Ebot*Xo)/(ER*Itilda_star))*(zbot*Iyz_star - ybot*Iyy_star)))+5;
 
 % determine the lower pmax (that is when it will break)
-if pmaxtop < pmaxbot
+if abs(pmaxtop) < abs(pmaxbot)
     pmax = pmaxtop;
-    fprintf('The maximum value of P is limited by the top surface\n')
+    fprintf('The maximum value of P is limited by the TOP SURFACE\n')
 else
     pmax = pmaxbot;
-    fprintf('The maximum value of P is limited by the bottom surface\n')
+    fprintf('The maximum value of P is limited by the BOTTOM SURFACE\n')
 end
 
 % Alert user of progress
-fprintf('Magnitude of pmax Found.\n')
+fprintf('Magnitude of pmax Found.\n\n')
 end
