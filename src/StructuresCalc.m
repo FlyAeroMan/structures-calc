@@ -39,7 +39,8 @@ alldata = datafromsheet;
 % Calculate angle of twist
 %theta = torsion(input vars);
 
-% etc
+% Calculate the Weight of the Structure
+weight = strucwght(alldata);
 
 % Generate beutiful Plots
 % plots(phi,u,v,w,x,y,z,etc)
