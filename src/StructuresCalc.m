@@ -15,7 +15,7 @@
 %     You should have received a copy of the GNU General Public License
 %     along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-% November 6, 2021 09:07:59 PM CDT
+% November 20, 2021 02:22:55 PM CST
 
 % NOTICE: This source code is Copyright (C) 2021  Kale Macormic and is
 % intended for AE525 Instructor/Grader use only. If you obtain this
@@ -30,14 +30,20 @@ clc
 % alldata
 alldata = datafromsheet;
 
+% Calculate pmax
+[pmax,stressmaxlocal] = findpmax(alldata);
+
+% Calculate the stress at pmax
+stressmax = stresscalc(alldata,stressmaxlocal,pmax);
+
+% Calculate Rib Spacing
+riblocal = bucklingcalc(alldata,pmax);
+
 % Calculate Deflection
 [u,v,w] = deflection(pmax,alldata)
 
 % Calculate angle of twist
-% [phi,x] = torsion(alldata)
-
-% Calculate neutral axis
-% [x,y,z] = neutral(alldata)
+%theta = torsion(input vars);
 
 % etc
 
