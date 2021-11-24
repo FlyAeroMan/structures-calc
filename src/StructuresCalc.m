@@ -40,7 +40,7 @@ stressmax = stresscalc(alldata,stressmaxlocal,pmax);
 riblocal = bucklingcalc(alldata,pmax);
 
 % Calculate Deflection
-%[u,v,w] = deflection(input vars);
+[u,v,w] = deflection(pmax,alldata)
 
 % Calculate angle of twist
 %theta = torsion(input vars);
