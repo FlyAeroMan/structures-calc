@@ -43,7 +43,8 @@ riblocal = bucklingcalc(alldata,pmax);
 [u,v,w] = deflection(pmax,alldata)
 
 % Calculate angle of twist
-%theta = torsion(input vars);
+theta = torsion(pmax,alldata)
+
 
 % etc
 
