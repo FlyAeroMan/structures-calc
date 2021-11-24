@@ -46,7 +46,8 @@ riblocal = bucklingcalc(alldata,pmax);
 theta = torsion(pmax,alldata)
 
 
-% etc
+% Calculate the Weight of the Structure
+weight = strucwght(alldata);
 
 % Generate beutiful Plots
 % plots(phi,u,v,w,x,y,z,etc)
