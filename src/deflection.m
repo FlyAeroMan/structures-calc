@@ -1,7 +1,30 @@
 function [u,v,w] = deflection(Pmax,alldata)
-%function to calculate the end deflection for an advanced aerospace beam
-%with one fixed end
-%Cameron Cropper
+% deflection - function to calculate the end deflections for an advanced 
+% aerospace beam with one fixed end
+%FORMAT: [u,v,w] = deflection(Pmax,alldata)
+
+% Copyright (C) 2021  Cameron Cropper
+%
+%     This program is free software: you can redistribute it and/or modify
+%     it under the terms of the GNU General Public License as published by
+%     the Free Software Foundation, either version 3 of the License, or
+%     (at your option) any later version.
+% 
+%     This program is distributed in the hope that it will be useful,
+%     but WITHOUT ANY WARRANTY; without even the implied warranty of
+%     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%     GNU General Public License for more details.
+% 
+%     You should have received a copy of the GNU General Public License
+%     along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+% November 24, 2021 09:35:51 AM CST
+
+% NOTICE: This source code is Copyright (C) 2021  Cameron Cropper and is
+% intended for AE525 Instructor/Grader use only. If you obtain this
+% document in error destroy it immediately.
+
+% Retrieve section properties and the load case from alldata
 Iyy = alldata{2}(3);
 Izz = alldata{2}(4);
 Iyz = alldata{2}(5);
@@ -10,14 +33,14 @@ A_star = alldata{2}(8);
 P = alldata{5}(:,1);
 x0 = alldata{5}(1,10);
 
-
+% Compute I_tilde
 I_tilde = Iyy * Izz - Iyz^2;
-My = 0;
+My = 0; %BUGBUG-- Hardcoded Values
 
-%%Case 1: P == 0---------------------------------------------------------
+%Case 1: P == 0------------------------------------------------------------
 %deflection in the y direction
 syms x v0_dp1 dv1 v1
-Mz_0(x) = 5 * (x - 45.625);
+Mz_0(x) = 5 * (x - 45.625); %BUGBUG-- Hardcoded Values
 v0_dp1 = (1/(Er * I_tilde)) * (Mz_0 * Iyy + My * Iyz);
 
 dv1(x) = int(v0_dp1);
@@ -48,10 +71,10 @@ u1(x) = int(du1);
 c1 = -1 * u1(0);
 u1(x) = u1(x) + c1;
 
-%%Case 2: P == 15---------------------------------------------------------
+%Case 2: P == 15-----------------------------------------------------------
 %deflection in the y direction
 syms x v0_dp2 dv2 v2
-Mz_15(x) = -10 * (x - 45.625);
+Mz_15(x) = -10 * (x - 45.625); %BUGBUG-- Hardcoded Values
 v0_dp2 = (1/(Er * I_tilde)) * (Mz_15 * Iyy + My * Iyz);
 
 dv2(x) = int(v0_dp2);
@@ -82,10 +105,10 @@ u2(x) = int(du2);
 c1 = -1 * u2(0);
 u2(x) = u2(x) + c1;
 
-%%Case 1: P == Pmax---------------------------------------------------------
+%Case 1: P == Pmax---------------------------------------------------------
 %deflection in the y direction
 syms x v0_dp3 dv3 v3
-Mz_max(x) = (-Pmax + 5) * (x - 45.625);
+Mz_max(x) = (-Pmax + 5) * (x - 45.625); %BUGBUG-- Hardcoded Values
 v0_dp3 = (1/(Er * I_tilde)) * (Mz_max * Iyy + My * Iyz);
 
 dv3(x) = int(v0_dp3);
@@ -116,7 +139,7 @@ u3(x) = int(du3);
 c1 = -1 * u3(0);
 u3(x) = u3(x) + c1;
 %------------------------------------------------------------------------
-%%Deflection matrices
+%Deflection matrices
 u = [vpa(u1(x0));vpa(u2(x0));vpa(u3(x0))];
 v = [vpa(v1(x0));vpa(v2(x0));vpa(v3(x0))];
 w = [vpa(w1(x0));vpa(w2(x0));vpa(w3(x0))];
