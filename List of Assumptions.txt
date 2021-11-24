@@ -1,9 +1,9 @@
 List of Assumptions:
-•	Negligible wieght (Gravity doesn't affect calculations)
+•	Negligible weight (Gravity doesn't affect calculations)
 •	Glue is Weightless and holds bonds together perfectly
 •	Potted Ends don’t Contribute to calculations
 •	Expoxy is Weightless
-•	Isotropic, Heterogeneous, Elastic
+•	Isotropic, Heterogeneous, Hookean
 •	Prismatic, Thin-Walled, Monocoque Member
 •	σxx >> σyy & σzz
 •	Plane Cross-Sections are perpendicular to the deformed longitudinal axis
