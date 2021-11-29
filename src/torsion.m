@@ -66,8 +66,14 @@ dphi3(x) = (1/(2 * A_hat)) * ((8*Q3)*(1.5) + (16*Q3)*(5.381-1.5) +...
 phi3(x) = int(dphi3);
 
 %Theta matrix--------------------------------------------------------------
-theta = [phi1(x0) * (180/pi);
-    phi2(x0) * (180/pi);
-    phi3(x0) * (180/pi)];
+theta = [vpa(phi1(x0) * (180/pi)); %in degrees
+    vpa(phi2(x0) * (180/pi));
+    vpa(phi3(x0) * (180/pi))];
+
+fig1 = fplot(Mx3,[0 46]);
+title('Moment about the x-axis along the span');
+xlabel('Distance along the span (in)');
+ylabel('Moment about the x-axis (lb*in)');
+saveas(fig1,'x_momentdiagram.emf');
 end
 
