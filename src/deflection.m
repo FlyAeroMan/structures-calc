@@ -30,11 +30,11 @@ Izz = alldata{2}(4);
 Iyz = alldata{2}(5);
 Er = alldata{2}(7);
 A_star = alldata{2}(8);
-P = alldata{5}(:,1);
+P = 0; %BUGBUG -- Hardcoded Values
 x0 = alldata{5}(1,10);
 
 % Compute I_tilde
-I_tilde = Iyy * Izz - Iyz^2;
+I_tilde = alldata{2}(6);
 My = 0; %BUGBUG-- Hardcoded Values
 
 %Case 1: P == 0------------------------------------------------------------
