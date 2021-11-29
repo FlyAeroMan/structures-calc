@@ -53,12 +53,12 @@ function stressmax = stresscalc(alldata,stressmaxlocal,pmax)
 fprintf('Determining Magnitude of Stresses on Top and Bottom Surfaces...\n')
 
 % Obtain required values from alldata
-P = pmax; %(lbf)
-My = 0; %BUGBUG-- need way to integrate
-Mz = 0; %BUGBUG-- HARDCODED BELOW
-A_star = alldata{2}(8);
+P = pmax; %(lbf) (not p from above this is technically Vy (pmax)
+% My = 0; %BUGBUG-- need way to integrate
+% Mz = 0; %BUGBUG-- HARDCODED BELOW IN EQN (-P+5)*(x-45.625), where x is zero
+% A_star = alldata{2}(8);
 Iyy_star = alldata{2}(3);
-Izz_star = alldata{2}(4);
+% Izz_star = alldata{2}(4);
 Iyz_star = alldata{2}(5);
 Itilda_star = alldata{2}(6);
 Etop = alldata{1}(1,1);
@@ -83,6 +83,28 @@ if sigmaxxtop > sigmaxxbot
     stressmax = sigmaxxtop;
 else
     stressmax = sigmaxxbot;
+end
+
+% Obtain hardcoded values of stringers from alldata for below
+ytopstring = alldata{6}(7,1) + abs(alldata{2}(1)); % Top most stringer closest to LE
+ztopstring = alldata{6}(7,2) + abs(alldata{2}(2)); % Top most stringer closest to LE
+ybotstring = alldata{6}(19,1) + abs(alldata{2}(1)); % Bottom most stringer closest to LE
+zbotstring = alldata{6}(19,2) + abs(alldata{2}(2)); % Bottom most stringer closest to LE
+Estring = alldata{1}(7,1); % (ksi) (it cancels with ER which is also in ksi)
+sigmamaxtop = alldata{1}(:,3)*1000; % Maximum Compressive Strength of stringer (psi)
+sigmamaxbot = alldata{1}(:,2)*1000; % Maximum Tensile Strength of stringer     (psi)
+
+% Hardcode a sanity check for now to verify if the stress in the stringers
+% is lessthan the material properties
+sigmaxxstringtop = (Estring/(ER*Itilda_star))*(-P+5)*(-45.625)*(ztopstring*Iyz_star-ytopstring*Iyy_star);
+sigmaxxstringbot = (Estring/(ER*Itilda_star))*(-P+5)*(-45.625)*(zbotstring*Iyz_star-ybotstring*Iyy_star);
+
+% Check to see if the stresses are greaterthan the material properties, 
+% Scream Bloody Murder into the command window if it is not.
+if sigmaxxstringtop >= sigmamaxtop
+    fprintf('WARNING: TOP STRINGERS FAIL BEFORE SKIN, PREDICTED PMAX TOO HIGH')
+elseif sigmaxxstringbot >= sigmamaxbot
+    fprintf('WARNING: BOTTOM STRINGERS FAIL BEFORE SKIN, PREDICTED PMAX TOO HIGH')
 end
 
 % Alert user of progress

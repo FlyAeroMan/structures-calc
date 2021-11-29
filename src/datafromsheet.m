@@ -11,7 +11,7 @@ function alldata = datafromsheet
 % alldata{1}(:,5) => Shear Modulus (ksi)
 % alldata{1}(:,6) => Specific Weight (lbf/ft^3)
 % alldata{1}(:,7) => Volume (in^3)
-% % All Modulus Weighted Cross Sectional Properties are in alldata{2}
+% All Modulus Weighted Cross Sectional Properties are in alldata{2}
 % alldata{2}(1) => ybar* (in)
 % alldata{2}(2) => zbar* (in)
 % alldata{2}(3) => Iyy* (in^4)
@@ -20,7 +20,7 @@ function alldata = datafromsheet
 % alldata{2}(6) => I~* (in^4)
 % alldata{2}(7) => ER (ksi)
 % alldata{2}(8) => A* (in^2)
-% % All Cross Sectional Properties are in alldata{3}
+% All Cross Sectional Properties are in alldata{3}
 % alldata{3}(1) => ybar (in)
 % alldata{3}(2) => zbar (in)
 % alldata{3}(3) => Iyy (in^4)
@@ -28,7 +28,7 @@ function alldata = datafromsheet
 % alldata{3}(5) => Iyz (in^4)
 % alldata{3}(6) => I~ (in^4)
 % alldata{3}(7) => A (in^2)
-% % All Rib Locations and skin boundaries are in alldata{4}
+% All Rib Locations and skin boundaries are in alldata{4}
 % alldata{4}(:,1) => Rib location if avaliable, no limit (in)
 % alldata{4}(1,2) => LE Top Skin y Location (in)
 % alldata{4}(1,3) => LE Top Skin z Location (in)

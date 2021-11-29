@@ -47,7 +47,7 @@ theta = torsion(pmax,alldata)
 
 
 % Calculate the Weight of the Structure
-weight = strucwght(alldata);
+weight = strucwght(alldata,length(riblocal));
 
 % Generate beutiful Plots
 % plots(phi,u,v,w,x,y,z,etc)

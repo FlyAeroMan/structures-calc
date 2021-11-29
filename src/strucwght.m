@@ -1,4 +1,4 @@
-function weight = strucwght(alldata)
+function weight = strucwght(alldata,numribs)
 % strucwght - estimates structure weight before glue using values from the
 % spreadsheet
 %FORMAT: weight = strucwght(alldata)
@@ -24,14 +24,16 @@ function weight = strucwght(alldata)
 % intended for AE525 Instructor/Grader use only. If you obtain this
 % document in error destroy it immediately.
 
-% Pulls the needed data matrix out of the alldata matrix
-a = alldata{1,1};
+% Stores all of the specific weight values from alldata
+specwght = alldata{1}(:,6);
 
-% Stores all of the specwght values from the a matrix
-specwght = a(:,6);
+% Stores the volume values for each element
+vol = alldata{1}(:,7);
 
-% Stores the values of volume for each element
-vol = a(:,7);
+% We know intermediate ribs weight exactly 0.0035lbf each and the two end
+% ribs weight 0.0125lbf. 
+ribweight = numribs * 0.0035; % Intermediate ribs
+ribweight = ribweight + 2*0.0125; % Add end ribs
 
 % Initialize weight
 weight(1,1) = 0;
@@ -43,7 +45,13 @@ for i = 1:length(specwght)
         weight(1,1) = weight(1,1) + (vol(i,1)/1728)*specwght(i,1);
         
         % Calculates weight of individual pieces
-        weight(i,1) = (vol(i,1)/1728)*specwght(i,1);
+        weight(i+1,1) = (vol(i,1)/1728)*specwght(i,1);
     end
 end
+
+% add the rib weight as the last row in weight and add it to the total
+weight(1,1) = weight(1,1) + ribweight;
+weight(length(weight)+1,1) = ribweight;
+
+%TODO: Clean zeros from weight
 end
