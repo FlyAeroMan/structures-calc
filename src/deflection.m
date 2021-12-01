@@ -144,15 +144,15 @@ u = [vpa(u1(x0));vpa(u2(x0));vpa(u3(x0))];
 v = [vpa(v1(x0));vpa(v2(x0));vpa(v3(x0))];
 w = [vpa(w1(x0));vpa(w2(x0));vpa(w3(x0))];
 
-fig1 = fplot(Mz_max,[0 46]);
-title('Moment about the z-axis along the span');
-xlabel('Distance along the span (in)');
-ylabel('Moment about z-axis (lb*in)');
-saveas(fig1,'z_momentdiagram.emf')
-Vy = Pmax - 5;
-fig2 = fplot(Vy,[0 46]);
-title('Shear force in y-direction along span');
-xlabel('Distance along the span (in)');
-ylabel('Shear force in y-direction (lb)');
-saveas(fig2,'y_sheardiagram.emf');
+% fig1 = fplot(Mz_max,[0 46]);
+% title('Moment about the z-axis along the span');
+% xlabel('Distance along the span (in)');
+% ylabel('Moment about z-axis (lb*in)');
+% saveas(fig1,'z_momentdiagram.emf')
+% Vy = Pmax - 5;
+% fig2 = fplot(Vy,[0 46]);
+% title('Shear force in y-direction along span');
+% xlabel('Distance along the span (in)');
+% ylabel('Shear force in y-direction (lb)');
+% saveas(fig2,'y_sheardiagram.emf');
 end

@@ -70,10 +70,10 @@ theta = [vpa(phi1(x0) * (180/pi)); %in degrees
     vpa(phi2(x0) * (180/pi));
     vpa(phi3(x0) * (180/pi))];
 
-fig1 = fplot(Mx3,[0 46]);
-title('Moment about the x-axis along the span');
-xlabel('Distance along the span (in)');
-ylabel('Moment about the x-axis (lb*in)');
-saveas(fig1,'x_momentdiagram.emf');
+% fig1 = fplot(Mx3,[0 46]);
+% title('Moment about the x-axis along the span');
+% xlabel('Distance along the span (in)');
+% ylabel('Moment about the x-axis (lb*in)');
+% saveas(fig1,'x_momentdiagram.emf');
 end
 
