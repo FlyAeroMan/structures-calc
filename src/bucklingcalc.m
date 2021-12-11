@@ -32,7 +32,7 @@ fprintf('Determining Rib spacing...\n')
 thickskin = alldata{6}(1,3); %                     (in)
 stringerwidth = alldata{6}(2,3); %                 (in)
 sparwidth = alldata{6}(3,3); %                     (in)
-topstringercount = alldata{6}(4,3);
+topstringercount = 0;%alldata{6}(4,3);
 botstringercount = alldata{6}(5,3);
 Xo = alldata{5}(2,10); %                           (in)
 Etop = alldata{1}(1,1)*1000; %                     (psi)
@@ -67,92 +67,126 @@ itr = 1;
 
 % Calculate the rib spacing needed for the top surface
 while xprimetop > 1 %&& imaginary == false
-% Calculate the bending stress at the LE and TE of the top skin
-sigmaxxLE = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprimetop)*(zLETop*Iyz_star-yLETop*Iyy_star);
-sigmaxxTE = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprimetop)*(zTETop*Iyz_star-yTETop*Iyy_star);
-
-% Calculate force in Top Skin:
-% Correct for the negative compression value by taking the absolute value
-Ftopskin = abs(thickskin*lengthtop*((sigmaxxLE + sigmaxxTE)/2));
-
-% Determine if the number of stringers supporting the skin is greater than
-% zero or zero.
-if topstringercount == 0
-    % If there are no stringers supporting the skin, Ftopstringer = 0
-    Ftopstringer = 0;
-else
-    if topstringercount ~= 1
-        fprintf('WARNING: THE NUMBER OF STRINGERS IN CODE FOR THE TOP SURFACE REQUIRES UPDATES\n')
-    end
-    % Hardcoding the centroid location of the stringers
-    yTopStringercentroid1 = abs(ybar_star) + alldata{6}(6,1);
-    zTopStringercentroid1 = abs(zbar_star) + alldata{6}(6,2);
-%     yTopStringercentroid2 = abs(ybar_star) + alldata{6}(6,1);
-%     zTopStringercentroid2 = abs(zbar_star) + alldata{6}(6,2);
-    % ADD MORE STRINGERS MANUALLY AS REQUIRED
+    % Calculate the bending stress at the LE and TE of the top skin
+    sigmaxxLE = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprimetop)*(zLETop*Iyz_star-yLETop*Iyy_star);
+    sigmaxxTE = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprimetop)*(zTETop*Iyz_star-yTETop*Iyy_star);
     
-    % Calculating stress at the centroid
-    sigmaxxTopStringer1 = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprimetop)*(zTopStringercentroid1*Iyz_star-yTopStringercentroid1*Iyy_star);
-%     sigmaxxTopStringer2 = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprimetop)*(zTopStringercentroid2*Iyz_star-yTopStringercentroid2*Iyy_star);
-    % ADD MORE STRINGERS MANUALLY AS REQUIRED
+    % Calculate force in Top Skin:
+    % Correct for the negative compression value by taking the absolute value
+    Ftopskin = abs(thickskin*lengthtop*((sigmaxxLE + sigmaxxTE)/2));
     
-    % Calculate force in stringer:
-    Ftopstringer1 = sigmaxxTopStringer1*0.125^2;
-%     Ftopstringer2 = sigmaxxTopStringer2*0.125^2;
-    Ftopstringer = Ftopstringer1;% + Ftopstringer2;
-end
-
-% Calculate Nx
-Nx = (1/lengthtop)*(Ftopskin+Ftopstringer);
-
-% Calculate a, the spacing between the ribs in inches
-s = lengthtop/(topstringercount +1);
-x = (((12*Nx*lengthtop^4)*(s-stringerwidth+stringerwidth*(thickskin/(thickskin+stringerwidth))^3))/(pi^2*Etop*s*thickskin^3))-2*lengthtop^2;
-v = lengthtop^4;
-aone = sqrt((x+sqrt(x^2-4*v))/(2));
-atwo = sqrt((x-sqrt(x^2-4*v))/(2));
-
-% % Generate plot for manual Review
-% a = linspace(0,8,2000);
-% Ncr = (pi.^2 ./ lengthtop.^2)*((a ./ lengthtop)+(lengthtop ./ a)).^2 .*((Etop .* s .* (thickskin).^3) ./ (12 .* (s-stringerwidth+stringerwidth .* (thickskin ./ (thickskin+stringerwidth)).^3)));
-% plot(a,Ncr)
-% title('TOP SURFACE')
-% xlim([0,4])
-% ylim([0,300])
-% yline(Nx);
-
-% Check to see if the above numbers are imaginary, if so exit this loop as
-% the distance between ribs cannot be negative, the user should add more
-% stringers to support their design.
-if ~(isreal(aone))
-    %imaginary = true;
-    %fprintf('WARNING: TOP SURFACE IMAGINARY VALUES!\n')
-    break
-elseif ~(isreal(atwo))
-    %imaginary = true;
-    %fprintf('WARNING: TOP SURFACE IMAGINARY VALUES!\n')
-    break
-end
-
-% Determine the smaller value of a and call it riblocal
-if aone < atwo
-    temp = aone*8;
-    temp = floor(temp)/8;
-    topriblocal(itr) = temp;
-    xprimetop = xprimetop - temp;
-    if aone > xprimetop
-        imaginary = true;
+    % Determine if the number of stringers supporting the skin is greater than
+    % zero or zero.
+    if topstringercount == 0
+        % If there are no stringers supporting the skin, Ftopstringer = 0
+        Ftopstringer = 0;
+    else
+        if topstringercount ~= 1
+            fprintf('WARNING: THE NUMBER OF STRINGERS IN CODE FOR THE TOP SURFACE REQUIRES UPDATES\n')
+        end
+        % Hardcoding the centroid location of the stringers
+        yTopStringercentroid1 = abs(ybar_star) + alldata{6}(6,1);
+        zTopStringercentroid1 = abs(zbar_star) + alldata{6}(6,2);
+        %     yTopStringercentroid2 = abs(ybar_star) + alldata{6}(6,1);
+        %     zTopStringercentroid2 = abs(zbar_star) + alldata{6}(6,2);
+        % ADD MORE STRINGERS MANUALLY AS REQUIRED
+        
+        % Calculating stress at the centroid
+        sigmaxxTopStringer1 = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprimetop)*(zTopStringercentroid1*Iyz_star-yTopStringercentroid1*Iyy_star);
+        %     sigmaxxTopStringer2 = (Etop/(ER*Itilda_star))*(-pmax+5)*(-xprimetop)*(zTopStringercentroid2*Iyz_star-yTopStringercentroid2*Iyy_star);
+        % ADD MORE STRINGERS MANUALLY AS REQUIRED
+        
+        % Calculate force in stringer:
+        Ftopstringer1 = sigmaxxTopStringer1*0.125^2;
+        %     Ftopstringer2 = sigmaxxTopStringer2*0.125^2;
+        Ftopstringer = Ftopstringer1;% + Ftopstringer2;
     end
-else
-    temp = atwo*8;
-    temp = floor(temp)/8;
-    topriblocal(itr) = temp;
-    xprimetop = xprimetop - temp;
-    if atwo > xprimetop
-        imaginary = true;
+    
+    % Calculate Nx
+    Nx = (1/lengthtop)*(Ftopskin+Ftopstringer);
+    
+    % Calculate a, the spacing between the ribs in inches
+    s = lengthtop/(topstringercount +1);
+    x = (((12*Nx*lengthtop^4)*(s-stringerwidth+stringerwidth*(thickskin/(thickskin+stringerwidth))^3))/(pi^2*Etop*s*thickskin^3))-2*lengthtop^2;
+    v = lengthtop^4;
+    aone = sqrt((x+sqrt(x^2-4*v))/(2));
+    atwo = sqrt((x-sqrt(x^2-4*v))/(2));
+    
+    % % Generate plot for manual Review
+    % a = linspace(0,8,2000);
+    % Ncr = (pi.^2 ./ lengthtop.^2)*((a ./ lengthtop)+(lengthtop ./ a)).^2 .*((Etop .* s .* (thickskin).^3) ./ (12 .* (s-stringerwidth+stringerwidth .* (thickskin ./ (thickskin+stringerwidth)).^3)));
+    % plot(a,Ncr)
+    % title('TOP SURFACE')
+    % xlim([0,4])
+    % ylim([0,300])
+    % yline(Nx);
+    
+    % Check to see if the above numbers are imaginary, if so exit this loop as
+    % the distance between ribs cannot be negative, the user should add more
+    % stringers to support their design.
+    if ~(isreal(aone))
+        %imaginary = true;
+        %fprintf('WARNING: TOP SURFACE IMAGINARY VALUES!\n')
+        break
+    elseif ~(isreal(atwo))
+        %imaginary = true;
+        %fprintf('WARNING: TOP SURFACE IMAGINARY VALUES!\n')
+        break
     end
-end
-itr = itr + 1;
+    
+    % Determine the smaller value of a and call it riblocal
+%     if aone < atwo
+%         temp = aone*8;
+%         temp = floor(temp)/8;
+%         temp = temp - (itr - 1)*0.125 - 0.0625;
+%         Ncr = (pi.^2 ./ lengthtop.^2)*((temp ./ lengthtop)+(lengthtop ./ temp)).^2 .*((Etop .* s .* (thickskin).^3) ./ (12 .* (s-stringerwidth+stringerwidth .* (thickskin ./ (thickskin+stringerwidth)).^3)));
+%         topriblocal(itr) = temp;
+%         xprimetop = xprimetop - temp;
+%         if Ncr/Nx <= 1.5
+%             fprintf('TOP RIB NUMBER %.0f SPACING SAFETY FACTOR BELOW 1.5: %0.3f\n',itr,Ncr/Nx)
+%         end
+%     else
+        temp = atwo*8;
+        temp = floor(temp)/8;
+        if itr == 1
+            temp = temp - 0.0625;
+        elseif itr <= 15
+            temp = temp - 0.1875;
+        elseif itr <= 16
+            temp = temp - 0.3125;
+        elseif itr <= 29
+            temp = temp - 0.25;
+        elseif itr <= 31
+            temp = temp - 0.375;
+        elseif itr <= 32
+            temp = temp - 0.25;
+        elseif itr <= 33
+            temp = temp - 0.375;
+        elseif itr <= 35
+            temp = temp - 0.3125;
+        elseif itr <= 36
+            temp = temp - 0.375;
+        elseif itr <= 39
+            temp = temp - 0.4375;
+        elseif itr <= 40
+            temp = temp - 0.625;
+        elseif itr <= 41
+            temp = temp - 0.75;
+        elseif itr <= 42
+            temp = temp - 1.0625;
+        else
+            fprintf('HARDCODED Rounding! These are wrong.\n')
+        end
+        Ncr = (pi.^2 ./ lengthtop.^2)*((temp ./ lengthtop)+(lengthtop ./ temp)).^2 .*((Etop .* s .* (thickskin).^3) ./ (12 .* (s-stringerwidth+stringerwidth .* (thickskin ./ (thickskin+stringerwidth)).^3)));
+        topriblocal(itr) = temp;
+        xprimetop = xprimetop - temp;
+        if Ncr/Nx <= 1.5
+            fprintf('TOP RIB NUMBER %.0f SPACING SAFETY FACTOR BELOW 1.5: %0.3f\n',itr,Ncr/Nx)
+        elseif Ncr/Nx >= 2.0
+            fprintf('TOP RIB NUMBER %.0f SPACING SAFETY FACTOR ABOVE 2.0: %0.3f\n',itr,Ncr/Nx)
+        end
+%     end
+    itr = itr + 1;
 end
 
 % Reset vars---------------------------BOTTOM------------------------------
@@ -245,20 +279,87 @@ elseif ~(isreal(atwo))
 end
 
 % Determine the smaller value of a and call it riblocal
-if aone < atwo
-    temp = aone*8;
-    temp = floor(temp)/8;
-    botriblocal(itr) = temp;
-    xprimebot = xprimebot - temp;
-    if aone > xprimebot
-        imaginary = true;
-    end
-else
+% if aone < atwo
+%     temp = aone*8;
+%     temp = floor(temp)/8;
+%     if itr == 1
+%             temp = temp - 0.0625;
+%         elseif itr <= 15
+%             temp = temp - 0.1875;
+%         elseif itr <= 16
+%             temp = temp - 0.3125;
+%         elseif itr <= 29
+%             temp = temp - 0.25;
+%         elseif itr <= 31
+%             temp = temp - 0.375;
+%         elseif itr <= 32
+%             temp = temp - 0.25;
+%         elseif itr <= 33
+%             temp = temp - 0.375;
+%         elseif itr <= 35
+%             temp = temp - 0.3125;
+%         elseif itr <= 36
+%             temp = temp - 0.375;
+%         elseif itr <= 39
+%             temp = temp - 0.4375;
+%         elseif itr <= 40
+%             temp = temp - 0.625;
+%         elseif itr <= 41
+%             temp = temp - 0.75;
+%         elseif itr <= 42
+%             temp = temp - 1.0625;
+%         else
+%             fprintf('HARDCODED Rounding! These are wrong.\n')
+%     end
+%     Ncr = (pi.^2 ./ lengthbot.^2)*((temp ./ lengthbot)+(lengthbot ./ temp)).^2 .*((Ebot .* s .* (thickskin).^3) ./ (12 .* (s-stringerwidth+stringerwidth .* (thickskin ./ (thickskin+stringerwidth)).^3)));
+%     botriblocal(itr) = temp;
+%     xprimebot = xprimebot - temp;
+%     if Ncr/Nx <= 1.5
+%         fprintf('BOTTOM RIB NUMBER %.0f SPACING SAFETY FACTOR BELOW 1.5: %0.3f\n',itr,Ncr/Nx)
+%     elseif Ncr/Nx >= 2.0
+%             fprintf('BOTTOM RIB NUMBER %.0f SPACING SAFETY FACTOR ABOVE 2.0: %0.3f\n',itr,Ncr/Nx)
+%     end
+% else
     temp = atwo*8;
     temp = floor(temp)/8;
+    if itr == 1
+            temp = temp - 0.0625;
+        elseif itr <= 15
+            temp = temp - 0.1875;
+        elseif itr <= 16
+            temp = temp - 0.3125;
+        elseif itr <= 29
+            temp = temp - 0.25;
+        elseif itr <= 31
+            temp = temp - 0.375;
+        elseif itr <= 32
+            temp = temp - 0.25;
+        elseif itr <= 33
+            temp = temp - 0.375;
+        elseif itr <= 35
+            temp = temp - 0.3125;
+        elseif itr <= 36
+            temp = temp - 0.375;
+        elseif itr <= 39
+            temp = temp - 0.4375;
+        elseif itr <= 40
+            temp = temp - 0.625;
+        elseif itr <= 41
+            temp = temp - 0.75;
+        elseif itr <= 42
+            temp = temp - 1.0625;
+        else
+            fprintf('HARDCODED Rounding! These are wrong.\n')
+    end
+    Ncr = (pi.^2 ./ lengthbot.^2)*((temp ./ lengthbot)+(lengthbot ./ temp)).^2 .*((Ebot .* s .* (thickskin).^3) ./ (12 .* (s-stringerwidth+stringerwidth .* (thickskin ./ (thickskin+stringerwidth)).^3)));
     botriblocal(itr) = temp;
     xprimebot = xprimebot - temp;
-end
+    if Ncr/Nx <= 1.5
+        fprintf('BOTTOM RIB NUMBER %.0f SPACING SAFETY FACTOR BELOW 1.5: %0.3f\n',itr,Ncr/Nx)
+    elseif Ncr/Nx >= 2.0
+            fprintf('BOTTOM RIB NUMBER %.0f SPACING SAFETY FACTOR ABOVE 2.0: %0.3f\n',itr,Ncr/Nx)
+    end
+% end
 itr = itr + 1;
 end
 
@@ -267,11 +368,11 @@ end
 if length(botriblocal) > length(topriblocal)
     riblocal = botriblocal;
     fprintf('The Number of Ribs is based on the BOTTOM SKIN\n')
-    fprintf('There is %.3fin of space between the last rib and the free end.\n',xprimebot)
+    fprintf('There is %.4fin of space between the last rib and the free end.\n',xprimebot)
 else
     riblocal = topriblocal;
     fprintf('The Number of Ribs is based on the TOP SKIN\n')
-    fprintf('There is %.3fin of space between the last rib and the free end.\n',xprimetop)
+    fprintf('There is %.4fin of space between the last rib and the free end.\n',xprimetop)
 end
 
 %Alert User of Progress
